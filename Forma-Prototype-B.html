@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forma Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F4F5F6; --surface:#FFFFFF; --surface-2:#EEF0F2; --surface-3:#E4E7EA;
+  --ink:#111418; --ink-2:#2B3137; --muted:#5B636B; --line:#DDE1E5; --line-2:#EEF0F2;
+  --accent:#C2410C; --accent-hover:#9A3412; --accent-ink:#FFFFFF; --accent-soft:#FFF4ED; --accent-soft-ink:#9A3412;
+  --side:#1B1F23; --side-2:#2A3036; --side-ink:#BAC2CA; --side-ink-strong:#FFFFFF; --side-line:#30363C; --side-field:#22272C; --signal:#F97316;
+  --s0:#8B949E; --s1:#2F5F8A; --s2:#C2410C; --s3:#15803D; --s4:#111418;
+  --good:#15803D; --good-soft:#E7F4EC; --info-soft:#EAF1F8; --info-ink:#244C70;
+  --focus:#2F5F8A; --scrim:rgba(17,20,24,.48); --shadow:0 12px 40px rgba(17,20,24,.18);
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111417; --surface:#191D21; --surface-2:#22272C; --surface-3:#2B3137;
+    --ink:#E8EBEE; --ink-2:#C9CFD5; --muted:#9AA3AD; --line:#2C3238; --line-2:#242A2F;
+    --accent:#F07A2E; --accent-hover:#F59451; --accent-ink:#111418; --accent-soft:#3A2418; --accent-soft-ink:#FDBA8C;
+    --side:#0C0E10; --side-2:#1D2226; --side-line:#23282D; --side-field:#15191C;
+    --s0:#8B949E; --s1:#6CA0D6; --s2:#F07A2E; --s3:#3FB26B; --s4:#E8EBEE;
+    --good:#3FB26B; --good-soft:#18301F; --info-soft:#1A2733; --info-ink:#9CC3E8; --focus:#6CA0D6; --scrim:rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111417; --surface:#191D21; --surface-2:#22272C; --surface-3:#2B3137;
+  --ink:#E8EBEE; --ink-2:#C9CFD5; --muted:#9AA3AD; --line:#2C3238; --line-2:#242A2F;
+  --accent:#F07A2E; --accent-hover:#F59451; --accent-ink:#111418; --accent-soft:#3A2418; --accent-soft-ink:#FDBA8C;
+  --side:#0C0E10; --side-2:#1D2226; --side-line:#23282D; --side-field:#15191C;
+  --s0:#8B949E; --s1:#6CA0D6; --s2:#F07A2E; --s3:#3FB26B; --s4:#E8EBEE;
+  --good:#3FB26B; --good-soft:#18301F; --info-soft:#1A2733; --info-ink:#9CC3E8; --focus:#6CA0D6; --scrim:rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+.mono{font-family:var(--mono)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.label{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+svg.i{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:square;stroke-linejoin:miter}
+
+/* Shell */
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100%;background:linear-gradient(to right,var(--side) 240px,transparent 240px)}
+.side{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;gap:24px;padding:20px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:0 10px;color:var(--side-ink-strong);font-weight:600;font-size:19px;letter-spacing:3.5px}
+.brand svg{width:30px;height:30px;flex-shrink:0}
+.area{display:flex;flex-direction:column;gap:6px;padding:0 10px}
+.area label{font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#8F98A1}
+.area select{height:40px;border-radius:2px;border:1px solid #3A4148;background:var(--side-field);color:#fff;padding:0 10px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:12px;height:42px;padding:0 12px;border:0;border-radius:2px;background:transparent;color:var(--side-ink);font-size:14px;font-weight:500;text-align:left;width:100%}
+.nav button:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav button[aria-current="page"]{background:var(--side-2);color:#fff;box-shadow:inset 3px 0 0 var(--signal)}
+.nav .count{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--signal);color:#111418;border-radius:2px;padding:1px 6px}
+.nav-foot{margin-top:auto;border-top:1px solid var(--side-line);padding-top:12px}
+.nav-foot button{font-size:13px;height:40px}
+.main{display:flex;flex-direction:column;min-width:0}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 32px;background:var(--surface);border-bottom:1px solid var(--line)}
+.crumb{font-family:var(--mono);font-size:12px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.crumb b{color:var(--ink);font-weight:500}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.search{display:flex;align-items:center;gap:8px;width:280px;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:2px;background:var(--surface-2);color:var(--muted)}
+.search input{border:0;outline:0;background:transparent;width:100%;font-size:13px;color:var(--ink)}
+.search:focus-within{border-color:var(--focus)}
+.role{display:flex;align-items:center;gap:8px}
+.role select,.select{height:40px;border:1px solid var(--line);border-radius:2px;background:var(--surface);padding:0 10px;font-size:13px}
+.demo-tag{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);padding:3px 6px;border-radius:2px;white-space:nowrap}
+.avatar{width:40px;height:40px;border-radius:2px;background:var(--side);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0}
+.top .menu-btn{display:none}
+.scrim{display:none}
+.content{padding:28px 32px 56px;display:flex;flex-direction:column;gap:24px;min-width:0}
+
+/* Headings */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:30px;font-weight:600;letter-spacing:-.6px;line-height:1.15}
+.page-head .sub{color:var(--muted);margin-top:6px;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+h2.sec{font-size:18px;font-weight:600;letter-spacing:-.2px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:2px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-size:14px;font-weight:600;white-space:nowrap;transition:background .12s,border-color .12s}
+.btn:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.secondary{background:var(--surface);color:var(--ink);border-color:var(--ink)}
+.btn.secondary:hover:not(:disabled){background:var(--surface-2);border-color:var(--ink)}
+.btn.quiet{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.quiet:hover:not(:disabled){background:var(--surface-2);border-color:var(--line)}
+.btn.sm{min-height:36px;padding:0 12px;font-size:13px}
+.btn svg.i{width:16px;height:16px;stroke-width:2}
+.link{border:0;background:none;padding:6px 0;color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.link:hover{color:var(--accent-hover);text-decoration:underline}
+.iconbtn{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:2px;background:transparent;color:var(--muted)}
+.iconbtn:hover:not(:disabled){background:var(--surface-2);color:var(--ink)}
+
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:14px 18px;display:flex;flex-direction:column;gap:6px}
+.metric b{font-family:var(--mono);font-weight:500;font-size:26px;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+
+/* Board */
+.board-wrap{overflow-x:auto;padding-bottom:6px}
+.board{display:grid;grid-template-columns:repeat(var(--cols),minmax(250px,1fr));gap:12px}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.col-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 8px;border-bottom:2px solid var(--tone)}
+.col-head .label{color:var(--ink);display:flex;align-items:center;gap:8px}
+.sq{width:8px;height:8px;background:var(--tone);display:inline-block;flex-shrink:0}
+.card{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;padding:14px 14px 12px;border:1px solid var(--line);border-radius:2px;background:var(--surface);transition:border-color .12s,box-shadow .12s}
+.card:hover{border-color:var(--ink);box-shadow:0 2px 0 var(--line)}
+.card.flag{border-color:var(--accent)}
+.card-t{font-size:14px;font-weight:600;line-height:1.35}
+.card-c{font-size:12px;color:var(--muted)}
+.card-v{font-family:var(--mono);font-weight:500;font-size:20px;letter-spacing:-.5px;margin-top:8px;font-variant-numeric:tabular-nums}
+.card-f{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:10px;border-top:1px solid var(--line-2);width:100%}
+.ini{width:26px;height:26px;border-radius:2px;background:var(--surface-2);font-family:var(--mono);font-size:11px;font-weight:500;display:inline-flex;align-items:center;justify-content:center}
+.card-note{margin-top:6px;padding:8px 10px;background:var(--accent-soft);color:var(--accent-soft-ink);font-size:12px;line-height:1.5;width:100%}
+.card-note.info{background:var(--info-soft);color:var(--info-ink)}
+.empty-col{font-size:12px;color:var(--muted);padding:14px 4px;text-align:center;border:1px dashed var(--line);border-radius:2px}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill .sq{width:7px;height:7px}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--accent-soft);color:var(--accent-soft-ink)}
+.pill.info{background:var(--info-soft);color:var(--info-ink)}
+
+/* Panels, lists, tables */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel.soft{background:var(--surface-2);border-color:transparent}
+.rows{background:var(--surface);border:1px solid var(--line);border-radius:2px}
+.row{display:flex;align-items:center;gap:16px;padding:14px 18px;border-top:1px solid var(--line-2);flex-wrap:wrap}
+.row:first-child{border-top:0}
+.row .grow{flex:1 1 220px;min-width:0}
+.row h3{font-size:14px;font-weight:600}
+button.row{width:100%;text-align:left;border-left:0;border-right:0;border-bottom:0;background:transparent}
+button.row:first-child{border-top:0}
+button.row:hover{background:var(--surface-2)}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start}
+.two.even{grid-template-columns:repeat(2,minmax(0,1fr))}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.facts div{display:flex;flex-direction:column;gap:4px}
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:2px}
+table.data{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table.data th{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+table.data td{padding:10px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+table.data tr:last-child td{border-bottom:0}
+table.data td.r,table.data th.r{text-align:right}
+table.data.quote{min-width:620px}
+table.data.quote td:first-child{min-width:190px}
+table.data input{width:88px;height:36px;border:1px solid var(--line);border-radius:2px;background:var(--surface);padding:0 8px;font-family:var(--mono);text-align:right}
+table.data input:disabled{background:transparent;border-color:transparent}
+.notice{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:2px;background:var(--info-soft);color:var(--info-ink);font-size:13px;line-height:1.5}
+.notice.warn{background:var(--accent-soft);color:var(--accent-soft-ink)}
+.notice.good{background:var(--good-soft);color:var(--good)}
+.notice svg.i{margin-top:1px}
+
+/* Tabs */
+.back{align-self:flex-start}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;padding:12px 0 14px;font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* Journey */
+.journey{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.step:first-child{border-top:0}
+.step .dot{width:14px;height:14px;border:2px solid var(--s0);border-radius:50%;justify-self:center}
+.step.done .dot{background:var(--good);border-color:var(--good)}
+.step.now .dot{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+
+/* Approvals */
+.appr{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:center;padding:18px 20px;border-top:1px solid var(--line-2)}
+.appr:first-child{border-top:0}
+.appr .mark{width:40px;height:40px;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--muted)}
+.appr .mark.ok{background:var(--good-soft);color:var(--good)}
+.appr .mark.now{background:var(--accent-soft);color:var(--accent-soft-ink)}
+
+/* Forms */
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500}
+.field input:not([type=checkbox]):not([type=file]):not([type=color]),.field select,.field textarea{height:42px;border:1px solid var(--line);border-radius:2px;background:var(--surface);padding:0 12px;font-size:14px;font-weight:400;width:100%}
+.field textarea{height:auto;min-height:104px;padding:10px 12px;resize:vertical;line-height:1.5}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--focus);outline-offset:0;border-color:var(--focus)}
+.field input:disabled,.field textarea:disabled{background:var(--surface-2);color:var(--muted)}
+.field input[type=color]{width:64px;height:42px;border:1px solid var(--line);border-radius:2px;padding:2px;background:var(--surface)}
+.field input[type=file]{font-size:13px}
+.hint{font-size:12px;font-weight:400;color:var(--muted)}
+.check{display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.form{display:flex;flex-direction:column;gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;min-height:44px;border-top:1px solid var(--line-2)}
+.switch-row:first-of-type{border-top:0}
+.switch-row input{width:18px;height:18px;accent-color:var(--accent)}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:var(--scrim);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;z-index:60;overflow-y:auto}
+.modal{position:relative;width:min(560px,100%);background:var(--surface);border-radius:2px;box-shadow:var(--shadow);padding:28px;display:flex;flex-direction:column;gap:18px}
+.modal.wide{width:min(900px,100%)}
+.modal h2{font-size:20px;font-weight:600;letter-spacing:-.3px;padding-right:40px}
+.modal .x{position:absolute;top:16px;right:16px}
+.cat-add{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line-2)}
+.cat-add input{height:40px;border:1px solid var(--line);border-radius:2px;padding:0 8px;font-family:var(--mono);background:var(--surface)}
+
+/* Document preview */
+.paper-wrap{background:var(--surface-3);padding:24px;border-radius:2px;overflow-x:auto}
+.paper{background:#fff;color:#1b1f23;max-width:720px;margin:0 auto;padding:48px;font-family:var(--sans);font-size:13px;line-height:1.55;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* Empty */
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:48px 20px;background:var(--surface);border:1px dashed var(--line);border-radius:2px}
+.empty svg.i{width:36px;height:36px;color:var(--muted);stroke-width:1.3}
+.empty h2{font-size:17px;font-weight:600}
+.empty p{color:var(--muted);max-width:44ch}
+
+/* Audit */
+.event{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;padding:14px 18px;border-top:1px solid var(--line-2);align-items:start}
+.event:first-child{border-top:0}
+.event .when{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.event .delta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:2px;word-break:break-word}
+
+/* Reports */
+.bar-row{display:grid;grid-template-columns:170px minmax(0,1fr) 110px 40px;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line-2)}
+.bar-row:first-child{border-top:0}
+.bar{height:14px;background:var(--surface-2);position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--tone)}
+
+/* Gantt */
+.gantt{display:flex;flex-direction:column;gap:6px}
+.g-row{display:grid;grid-template-columns:200px minmax(0,1fr);gap:12px;align-items:center;font-size:13px}
+.g-track{position:relative;height:22px;background:var(--surface-2)}
+.g-bar{position:absolute;top:4px;bottom:4px;background:var(--s1)}
+.g-bar.done{background:var(--good)}
+.g-ms{position:absolute;top:3px;width:16px;height:16px;background:var(--accent);transform:translateX(-8px) rotate(45deg)}
+.g-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:212px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--side);color:#fff;padding:12px 16px;border-radius:2px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow);z-index:80;font-size:13px;max-width:calc(100% - 32px)}
+.toast svg.i{color:var(--signal)}
+
+/* Login */
+.login{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.login-art{background:var(--side);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:32px}
+.login-art .brand{padding:0}
+.login-art h1{font-size:34px;font-weight:600;letter-spacing:-.8px;line-height:1.2;max-width:18ch}
+.login-art p{color:var(--side-ink);max-width:44ch}
+.login-form{display:flex;align-items:center;justify-content:center;padding:48px 24px;background:var(--bg)}
+.login-form .form{width:min(380px,100%)}
+.login-form h2{font-size:24px;font-weight:600;letter-spacing:-.4px}
+
+@media (max-width:1100px){
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two,.two.even{grid-template-columns:minmax(0,1fr)}
+  .search{width:200px}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);background:none}
+  .side{position:fixed;left:0;top:0;bottom:0;width:260px;z-index:50;transform:translateX(-100%);transition:transform .2s;height:100%;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none}
+  .scrim.open{display:block;position:fixed;inset:0;background:var(--scrim);z-index:40}
+  .top .menu-btn{display:inline-flex}
+  .top{padding:10px 16px;flex-wrap:wrap;top:env(safe-area-inset-top,0px)}
+  .top-right{width:100%;margin-left:0}
+  .search{flex:1;width:auto}
+  .demo-tag{display:none}
+  .content{padding:20px 16px 48px}
+  .page-head h1{font-size:24px}
+  .facts,.grid2{grid-template-columns:minmax(0,1fr)}
+  .bar-row{grid-template-columns:110px minmax(0,1fr) 90px}
+  .bar-row .cnt{display:none}
+  .g-row{grid-template-columns:110px minmax(0,1fr)}
+  .g-scale{margin-left:122px}
+  .login{grid-template-columns:minmax(0,1fr)}
+  .login-art{padding:28px 20px}
+  .appr{grid-template-columns:40px minmax(0,1fr)}
+  .appr .actions{grid-column:1 / -1}
+  .paper{padding:24px}
+  .paper-wrap{padding:12px}
+}
+@media (max-width:520px){
+  .metrics{grid-template-columns:minmax(0,1fr)}
+  .role .label{display:none}
+  .cat-add{grid-template-columns:minmax(0,1fr) 80px}
+  .cat-add .btn{grid-column:1 / -1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Utilities ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:0,maximumFractionDigits:2}).format(Number(n)||0);
+const fmtDate = d => { if(!d) return '—'; const x = new Date(d + (String(d).length===10 ? 'T12:00' : '')); return isNaN(x) ? esc(d) : x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); };
+const stamp = () => new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => Date.now() + Math.floor(Math.random()*1000);
+const csvCell = v => '"' + String(v).replace(/"/g,'""') + '"';
+const initials = n => String(n||'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase() || '—';
+
+const STAGES = ['Intake','Quote in progress','In approval','Awaiting signature','Delivery'];
+const ROLES = ['Administrator','Sales author','Technical approver','Commercial approver','Delivery lead'];
+const NAV = [['My work','home'],['Projects','folder'],['Catalogue','layers'],['Approvals','check'],['Tenders','file'],['Planning','calendar'],['Reports','chart']];
+const FEATURES = ['Tenders','Planning','Reports'];
+
+const ICONS = {
+  home:'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z', folder:'M3 6h6l2 2h10v11H3z', layers:'M12 3 2 8l10 5 10-5zM2 13l10 5 10-5',
+  check:'M9 12l2 2 4-4M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', file:'M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6',
+  calendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4', chart:'M5 20V11M11 20V5M17 20v-7M3 20h18',
+  settings:'M4 7h9M17 7h3M15 5v4M4 17h3M11 17h9M9 15v4', clock:'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+  out:'M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10', search:'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4',
+  plus:'M12 5v14M5 12h14', x:'M6 6l12 12M18 6 6 18', left:'M15 5l-7 7 7 7M8 12h12', right:'M9 5l7 7-7 7M4 12h12',
+  lock:'M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4', info:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v6M12 7.5v.5',
+  down:'M12 4v11M7 10l5 5 5-5M5 20h14', menu:'M4 7h16M4 12h16M4 17h16', ok:'M5 12l5 5 9-10', pen:'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',
+  sign:'M3 17c3 0 4-6 6-6s1 5 3 5 2-3 4-3 2 2 5 2M3 21h18', box:'M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10',
+  upload:'M12 20V9M7 14l5-5 5 5M5 4h14', eye:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'
+};
+const ic = (n, cls='i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[n]||''}"/></svg>`;
+const MARK = `<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="2" fill="#2A3036"/><path d="M8 26 18 9l10 17z" fill="none" stroke="#F97316" stroke-width="2.4" stroke-linejoin="round"/><circle cx="18" cy="20" r="2.4" fill="#FFFFFF"/></svg>`;
+
+/* ---------- Storage ---------- */
+const KEY = 'forma-b-v1';
+const store = {
+  get(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; } },
+  set(v){ try { localStorage.setItem(KEY, JSON.stringify(v)); return true; } catch(e){ return false; } }
+};
+
+/* ---------- Seed data ---------- */
+function seedLines(value){
+  const sw = {name:'Managed network switch',qty:10,cost:280,basePrice:420,price:399};
+  const ap = {name:'Wireless access point',qty:20,cost:120,basePrice:195,price:185.25};
+  const inst = Math.max(0, value - (sw.qty*sw.price + ap.qty*ap.price));
+  return [sw, ap, {name:'Installation and commissioning',qty:1,cost:Math.round(inst*0.55),price:inst}];
+}
+const SEED_ROWS = [
+  ['Riverside depot connectivity','Westbridge Council',62400,0,'EW','2026-09-30'],
+  ['Millbrook bridge upgrade','Halsden County Council',28750,0,'PR','2026-10-02'],
+  ['Cedar Vale site enablement','Greenford Infrastructure',19600,0,'LC','2026-10-06'],
+  ['Eastfield station renewal','Northshire Rail',74200,1,'JM','2026-09-28'],
+  ['Maple Road civil works','Briarwick Council',37850,1,'AH','2026-10-01'],
+  ['Langford utilities diversion','Stonebridge Developments',52300,1,'SB','2026-10-02'],
+  ['North Quay network upgrade','Harbourview PLC',48600,2,'CS','2026-09-29'],
+  ['Ashcroft flood defences','Rivermere Council',91000,2,'TO','2026-10-02'],
+  ['Hillside energy resilience','Eastmoor Council',38900,3,'MD','2026-09-30'],
+  ['Kingsmead signalling upgrade','Greywell Rail',73300,3,'CH','2026-10-06']
+];
+function makeProject(r, i){
+  return {
+    id:1041+i, name:r[0], client:r[1], value:r[2], stage:r[3], owner:r[4], due:r[5], area:'Infrastructure',
+    rev:1, approval: r[3]===2 ? (i===7 ? 'Commercial' : 'Technical') : r[3]>2 ? 'Complete' : 'Technical',
+    brief:'', narrative:'', discount:0, lines:seedLines(r[2]), revisions:[], documents:[], files:[],
+    signed:false, counter:false, tasks:[]
+  };
+}
+function seedState(){
+  const projects = SEED_ROWS.map(makeProject);
+  projects.push(Object.assign(makeProject(['Orchard House access control','Orchard Group',24600,0,'CS','2026-10-09'], 0), {id:1101, area:'Security'}));
+  const s = {
+    projects,
+    areas:['Infrastructure','Security'],
+    settings:{},
+    catalogue:[
+      {name:'Managed network switch',brand:'Arbor',category:'Networking',cost:280,price:420,area:'Infrastructure'},
+      {name:'Wireless access point',brand:'Arbor',category:'Wireless',cost:120,price:195,area:'Infrastructure'},
+      {name:'Structured cabling point',brand:'Fieldline',category:'Cabling',cost:45,price:85,area:'Infrastructure'},
+      {name:'Door access controller',brand:'Keyline',category:'Access control',cost:310,price:465,area:'Security'},
+      {name:'Proximity card reader',brand:'Keyline',category:'Access control',cost:62,price:98,area:'Security'}
+    ],
+    tenders:[{id:1,name:'North Quay equipment package',status:'Open',deadline:'2026-10-02',suppliers:['Arbor Supply','Fieldline UK'],bids:{},area:'Infrastructure'}],
+    users:[
+      {name:'Callum Smith',email:'callum@example.com',role:'Administrator'},
+      {name:'Emma Wilson',email:'emma@example.com',role:'Technical approver'},
+      {name:'Marcus Lee',email:'marcus@example.com',role:'Delivery lead'}
+    ],
+    events:[]
+  };
+  // Seeded example history so the audit trail opens in a realistic state
+  const ev = (a,b,c,pid,who,date) => ({action:a,before:b,after:c,projectId:pid,who,date,area:'Infrastructure',example:true});
+  s.events = [
+    ev('Commercial approval granted for revision 1','In approval','Awaiting signature',1049,'Callum Smith','22 Sept 2026, 16:05'),
+    ev('Commercial approval granted for revision 1','In approval','Awaiting signature',1050,'Callum Smith','23 Sept 2026, 11:40'),
+    ev('Technical approval granted for revision 1','Technical','Commercial',1048,'Emma Wilson','24 Sept 2026, 09:12'),
+    ev('Submitted for technical approval','Quote in progress','In approval',1047,'Callum Smith','24 Sept 2026, 14:30')
+  ].reverse();
+  // Projects awaiting signature already have an approved customer document
+  projects.filter(p=>p.stage===3).forEach(p=>{ p.documents=[snapshot(p,'Approved',s,'22 Sept 2026')]; });
+  return s;
+}
+
+/* ---------- App state ---------- */
+let S = store.get();
+if(!S || !Array.isArray(S.projects)) S = seedState();
+const U = { signedIn:true, mfa:false, view:'Projects', area:S.areas[0], role:'Administrator', pid:null, tab:'Overview', modal:null, q:'', busy:false, toast:'', supplier:null, nav:false, pendingLogo:null };
+let toastTimer;
+function persist(){ if(!store.set(S)) { /* storage unavailable: keep working in memory */ } }
+function toast(msg){ U.toast = msg; renderToast(); clearTimeout(toastTimer); toastTimer = setTimeout(()=>{ U.toast=''; renderToast(); }, 3800); }
+function log(action, before='', after='', pid){ S.events.unshift({action, before, after, projectId: pid===undefined ? U.pid : pid, who: U.role==='Administrator' ? 'Callum Smith' : 'Callum Smith (' + U.role + ')', date: stamp(), area: U.area}); }
+const areaSet = () => (S.settings[U.area] = S.settings[U.area] || {});
+const features = () => Object.assign({Tenders:true,Planning:true,Reports:true}, areaSet().features||{});
+const canSeeCost = () => ['Administrator','Commercial approver'].includes(U.role);
+const cur = () => S.projects.find(p => p.id===U.pid && p.area===U.area);
+const inArea = () => S.projects.filter(p => p.area===U.area);
+const filtered = () => { const q = U.q.trim().toLowerCase(); return inArea().filter(p => !q || (p.name+' '+p.client).toLowerCase().includes(q)); };
+const subtotal = p => p.lines.reduce((a,l)=>a + l.qty*l.price, 0);
+const total = p => subtotal(p) * (1 - (p.discount||0)/100);
+const cost = p => p.lines.reduce((a,l)=>a + l.qty*(l.cost||0), 0);
+const techOwner = () => areaSet().technical || 'Emma Wilson';
+const commOwner = () => areaSet().commercial || 'Callum Smith';
+function update(id, patch, action){
+  const p = S.projects.find(x=>x.id===id); if(!p) return;
+  const beforeStage = STAGES[p.stage];
+  Object.assign(p, patch);
+  if(action) log(action, patch.stage!==undefined ? beforeStage : '', patch.stage!==undefined ? STAGES[p.stage] : '', id);
+  persist();
+}
+function bracket(base, qty){ return Math.round(base * (qty>=50 ? .9 : qty>=10 ? .95 : 1) * 100) / 100; }
+
+/* ---------- Customer documents ---------- */
+function snapshot(p, status, state, date){
+  const st = (state||S).settings[p.area] || {};
+  return {
+    id: uid(), rev:p.rev, date: date || new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), status,
+    ref:'Q-'+p.id, name:p.name, client:p.client, narrative:p.narrative, discount:p.discount||0,
+    lines:p.lines.map(l=>({name:l.name,qty:l.qty,price:l.price})),
+    template: st.template || 'Standard proposal', theme: st.theme || '#1B1F23', accent:'#C2410C',
+    contact: st.contact || 'Commercial team · London, United Kingdom', footer: st.footer || 'Private and confidential', logo: st.logo || ''
+  };
+}
+const docTotal = d => d.lines.reduce((a,l)=>a+l.qty*l.price,0)*(1-(d.discount||0)/100);
+function docInner(d, kind){
+  const title = kind || (d.template==='Compact quotation' ? 'Quotation' : d.template==='Detailed infrastructure proposal' ? 'Infrastructure proposal' : 'Commercial proposal');
+  const sub = d.lines.reduce((a,l)=>a+l.qty*l.price,0);
+  const rows = d.lines.map(l=>`<tr><td style="padding:10px 8px;border-bottom:1px solid #e3e6e9">${esc(l.name)}</td><td style="padding:10px 8px;border-bottom:1px solid #e3e6e9;text-align:right;font-family:'IBM Plex Mono',monospace">${esc(l.qty)}</td><td style="padding:10px 8px;border-bottom:1px solid #e3e6e9;text-align:right;font-family:'IBM Plex Mono',monospace">${money(l.price)}</td><td style="padding:10px 8px;border-bottom:1px solid #e3e6e9;text-align:right;font-family:'IBM Plex Mono',monospace">${money(l.qty*l.price)}</td></tr>`).join('');
+  const draft = d.status!=='Approved' ? `<div style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;padding:3px 8px;background:#FFF4ED;color:#9A3412;margin-bottom:12px">DRAFT · NOT FOR SIGNATURE</div>` : '';
+  const detailed = d.template==='Detailed infrastructure proposal' ? `<h3 style="font-size:14px;margin:24px 0 6px;color:${esc(d.theme)}">Delivery approach</h3><p style="margin:0 0 8px">Works are delivered in agreed phases with site surveys, installation, testing and commissioning, followed by handover documentation and a warranty period.</p>` : '';
+  return `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:3px solid ${esc(d.theme)};padding-bottom:16px;margin-bottom:24px">
+    <div>${d.logo ? `<img src="${esc(d.logo)}" alt="Business logo" style="max-width:150px;max-height:60px;display:block;margin-bottom:10px">` : `<div style="font-weight:600;letter-spacing:3px;font-size:16px;color:${esc(d.theme)}">FORMA</div>`}<div style="color:#5b636b;font-size:12px;margin-top:4px">${esc(d.contact)}</div></div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5b636b">${esc(d.ref)} · Rev ${esc(d.rev)}<br>${esc(d.date)}</div></div>
+    ${draft}
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5b636b">${esc(title)}</div>
+    <h1 style="font-size:26px;line-height:1.2;margin:6px 0 4px;color:${esc(d.theme)}">${esc(d.name)}</h1>
+    <p style="margin:0 0 18px;color:#5b636b">Prepared for ${esc(d.client)}</p>
+    <p style="margin:0 0 20px">${esc(d.narrative || 'Supply, installation and commissioning as detailed below.')}</p>
+    ${detailed}
+    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:#f4f5f6"><th style="text-align:left;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.6px">DESCRIPTION</th><th style="text-align:right;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:11px">QTY</th><th style="text-align:right;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:11px">UNIT PRICE</th><th style="text-align:right;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:11px">TOTAL</th></tr></thead><tbody>${rows}</tbody></table>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-top:16px;font-family:'IBM Plex Mono',monospace">
+      <div style="color:#5b636b">Subtotal ${money(sub)}</div>
+      ${d.discount ? `<div style="color:#5b636b">Discount ${esc(d.discount)}%</div>` : ''}
+      <div style="font-size:20px;font-weight:500;color:${esc(d.theme)}">Total ${money(docTotal(d))}</div>
+      <div style="color:#5b636b;font-size:12px">Excluding VAT · Valid for 30 days</div></div>
+    <div style="margin-top:40px;padding-top:12px;border-top:1px solid #e3e6e9;color:#5b636b;font-size:11px">${esc(d.footer)}</div>`;
+}
+const docHTML = (d, kind) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc((kind||'Quotation')+' '+d.ref)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap"><style>body{font-family:'IBM Plex Sans',Arial,sans-serif;color:#1b1f23;max-width:760px;margin:48px auto;padding:0 24px;font-size:14px;line-height:1.55}</style></head><body>${docInner(d, kind)}</body></html>`;
+
+/* ---------- Files ---------- */
+function loadScript(src){ return new Promise((res, rej)=>{ if(document.querySelector(`script[src="${src}"]`)) return res(); const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=()=>rej(new Error('load')); document.head.appendChild(s); }); }
+let dlPromise;
+function downloadsCap(){
+  if(!(window.claude && typeof window.claude.use==='function')) return Promise.resolve(null);
+  if(!dlPromise) dlPromise = window.claude.use('downloads').catch(()=>null);
+  return dlPromise;
+}
+async function saveFile(filename, data, mime){
+  const cap = await downloadsCap();
+  if(cap){
+    try { await cap.save({filename, data}); toast(filename + ' saved'); }
+    catch(e){ toast(e && e.code==='declined' ? 'Download cancelled' : 'This view can’t save files. Open the app in a browser tab to download.'); }
+    return;
+  }
+  const blob = data instanceof Blob ? data : new Blob([data], {type: mime||'text/plain'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  toast(filename + ' downloaded');
+}
+function hexRgb(h){ const m = /^#?([0-9a-f]{6})$/i.exec(h||''); const n = m ? parseInt(m[1],16) : 0x1B1F23; return [(n>>16)&255,(n>>8)&255,n&255]; }
+async function pdfFor(d, kind){
+  try { await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); }
+  catch(e){ toast('The PDF tool could not load. Check your connection and try again.'); return; }
+  const { jsPDF } = window.jspdf; const doc = new jsPDF({unit:'pt',format:'a4'});
+  const W = 595, M = 56, th = hexRgb(d.theme); let y = 64;
+  const money2 = money;
+  const page = need => { if(y + need > 780){ doc.addPage(); y = 64; } };
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(...th); doc.text('FORMA', M, y);
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(91,99,107);
+  doc.text(`${d.ref} · Rev ${d.rev}`, W-M, y, {align:'right'}); doc.text(String(d.date), W-M, y+12, {align:'right'});
+  doc.setFont('helvetica','normal'); doc.text(doc.splitTextToSize(d.contact, 300), M, y+14);
+  y += 30; doc.setDrawColor(...th); doc.setLineWidth(2); doc.line(M, y, W-M, y); y += 30;
+  if(d.status!=='Approved'){ doc.setFont('courier','bold'); doc.setFontSize(9); doc.setTextColor(154,52,18); doc.text('DRAFT · NOT FOR SIGNATURE', M, y); y += 18; }
+  doc.setFont('courier','normal'); doc.setFontSize(9); doc.setTextColor(91,99,107); doc.text(String(kind || d.template).toUpperCase(), M, y); y += 22;
+  doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(...th);
+  const tl = doc.splitTextToSize(d.name, W-2*M); doc.text(tl, M, y); y += tl.length*24;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(91,99,107); doc.text('Prepared for ' + d.client, M, y); y += 22;
+  doc.setTextColor(27,31,35); const nl = doc.splitTextToSize(d.narrative || 'Supply, installation and commissioning as detailed below.', W-2*M); doc.text(nl, M, y); y += nl.length*14 + 14;
+  const cols = [M, W-M-230, W-M-120, W-M];
+  doc.setFillColor(244,245,246); doc.rect(M, y-12, W-2*M, 20, 'F');
+  doc.setFont('courier','bold'); doc.setFontSize(8); doc.setTextColor(91,99,107);
+  doc.text('DESCRIPTION', M+6, y+2); doc.text('QTY', cols[1], y+2, {align:'right'}); doc.text('UNIT PRICE', cols[2], y+2, {align:'right'}); doc.text('TOTAL', cols[3]-6, y+2, {align:'right'}); y += 24;
+  doc.setFontSize(10);
+  d.lines.forEach(l => { const nm = doc.splitTextToSize(l.name, cols[1]-M-60); page(nm.length*13+10);
+    doc.setFont('helvetica','normal'); doc.setTextColor(27,31,35); doc.text(nm, M+6, y);
+    doc.setFont('courier','normal'); doc.text(String(l.qty), cols[1], y, {align:'right'}); doc.text(money2(l.price), cols[2], y, {align:'right'}); doc.text(money2(l.qty*l.price), cols[3]-6, y, {align:'right'});
+    y += nm.length*13 + 6; doc.setDrawColor(227,230,233); doc.setLineWidth(.5); doc.line(M, y-2, W-M, y-2); y += 12; });
+  page(80); y += 8; doc.setFont('courier','normal'); doc.setFontSize(10); doc.setTextColor(91,99,107);
+  doc.text('Subtotal ' + money2(d.lines.reduce((a,l)=>a+l.qty*l.price,0)), W-M, y, {align:'right'}); y += 14;
+  if(d.discount){ doc.text('Discount ' + d.discount + '%', W-M, y, {align:'right'}); y += 14; }
+  doc.setFont('courier','bold'); doc.setFontSize(14); doc.setTextColor(...th); doc.text('Total ' + money2(docTotal(d)), W-M, y+6, {align:'right'}); y += 22;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(91,99,107); doc.text('Excluding VAT · Valid for 30 days', W-M, y, {align:'right'});
+  doc.setFontSize(8); doc.text(d.footer, M, 810);
+  await saveFile(`${kind ? kind.replace(/\s+/g,'-') : 'Quotation'}-${d.ref}-v${d.rev}.pdf`, doc.output('blob'), 'application/pdf');
+}
+const xml = s => String(s).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));
+async function docxFor(d){
+  try { await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'); }
+  catch(e){ toast('The Word export tool could not load. Check your connection and try again.'); return; }
+  const P = (t, o={}) => `<w:p>${o.style?`<w:pPr><w:pStyle w:val="${o.style}"/>${o.right?'<w:jc w:val="right"/>':''}</w:pPr>`:o.right?'<w:pPr><w:jc w:val="right"/></w:pPr>':''}<w:r>${o.bold||o.size||o.color?`<w:rPr>${o.bold?'<w:b/>':''}${o.color?`<w:color w:val="${o.color}"/>`:''}${o.size?`<w:sz w:val="${o.size}"/>`:''}</w:rPr>`:''}<w:t xml:space="preserve">${xml(t)}</w:t></w:r></w:p>`;
+  const cell = (t, right, bold) => `<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>${P(t,{right,bold})}</w:tc>`;
+  const color = (d.theme||'#1B1F23').replace('#','');
+  const rows = [`<w:tr>${cell('Description',false,true)}${cell('Qty',true,true)}${cell('Unit price',true,true)}${cell('Total',true,true)}</w:tr>`]
+    .concat(d.lines.map(l=>`<w:tr>${cell(l.name)}${cell(String(l.qty),true)}${cell(money(l.price),true)}${cell(money(l.qty*l.price),true)}</w:tr>`)).join('');
+  const body = [P('FORMA',{bold:true,color}), P(d.contact), P(`${d.ref} · Revision ${d.rev} · ${d.date}`), d.status!=='Approved'?P('DRAFT · NOT FOR SIGNATURE',{bold:true,color:'9A3412'}):'',
+    P(d.template,{color:'5B636B'}), P(d.name,{bold:true,size:40,color}), P('Prepared for ' + d.client), P(d.narrative || 'Supply, installation and commissioning as detailed below.'),
+    `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders><w:bottom w:val="single" w:sz="4" w:color="DDE1E5"/><w:insideH w:val="single" w:sz="4" w:color="DDE1E5"/></w:tblBorders></w:tblPr>${rows}</w:tbl>`,
+    P('Subtotal ' + money(d.lines.reduce((a,l)=>a+l.qty*l.price,0)),{right:true}), d.discount?P('Discount ' + d.discount + '%',{right:true}):'',
+    P('Total ' + money(docTotal(d)),{right:true,bold:true,size:28,color}), P('Excluding VAT · Valid for 30 days',{right:true}), P(''), P(d.footer,{color:'5B636B'})].join('');
+  const zip = new window.JSZip();
+  zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+  zip.file('_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+  zip.file('word/document.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr></w:body></w:document>`);
+  const blob = await zip.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  await saveFile(`Quotation-${d.ref}-v${d.rev}.docx`, blob);
+}
+
+/* ---------- Render: shell ---------- */
+const toneVar = i => `var(--s${i})`;
+const stagePill = i => `<span class="pill" style="--tone:${toneVar(i)}"><span class="sq"></span>${esc(STAGES[i])}</span>`;
+const pageHead = (title, sub, actions='') => `<div class="page-head"><div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${actions?`<div class="actions">${actions}</div>`:''}</div>`;
+const btn = (label, act, o={}) => `<button type="${o.type||'button'}" class="btn ${o.cls||''}" ${act?`data-act="${act}"`:''} ${o.data||''} ${o.disabled?'disabled':''} ${o.title?`title="${esc(o.title)}"`:''}>${o.icon?ic(o.icon):''}${esc(label)}</button>`;
+const emptyBox = (icon, title, text, action='') => `<div class="empty">${ic(icon)}<h2>${esc(title)}</h2><p>${esc(text)}</p>${action}</div>`;
+const phase2 = '<span class="pill info">Phase two</span>';
+
+function approvalsWaiting(){ return inArea().filter(p=>p.stage===2).length; }
+function renderShell(){
+  const f = features();
+  const navHTML = NAV.filter(([n]) => f[n]!==false || !FEATURES.includes(n)).map(([n,icn]) => {
+    const count = n==='Approvals' ? approvalsWaiting() : 0;
+    return `<button type="button" data-act="nav" data-v="${n}" ${U.view===n ? 'aria-current="page"' : ''}>${ic(icn)}<span>${n}</span>${count?`<span class="count" aria-label="${count} waiting">${count}</span>`:''}</button>`;
+  }).join('');
+  const foot = [['Administration','settings'],['Audit trail','clock']].map(([n,icn]) => `<button type="button" data-act="nav" data-v="${n}" ${U.view===n?'aria-current="page"':''}>${ic(icn)}<span>${n}</span></button>`).join('')
+    + `<button type="button" data-act="signOut">${ic('out')}<span>Sign out</span></button>`;
+  $('#side').innerHTML = `
+    <div class="brand">${MARK}<span>FORMA</span></div>
+    <div class="area"><label for="areaSel">Business area</label><select id="areaSel" data-change="area">${S.areas.map(a=>`<option ${a===U.area?'selected':''}>${esc(a)}</option>`).join('')}</select></div>
+    <nav class="nav" aria-label="Main">${navHTML}</nav>
+    <div class="nav nav-foot">${foot}</div>`;
+  $('#side').classList.toggle('open', U.nav);
+  $('#scrim').classList.toggle('open', U.nav);
+}
+function crumbText(){
+  const p = cur();
+  if(p) return `${esc(U.area)} / Projects / <b>PRJ-${p.id}</b>`;
+  return `${esc(U.area)} / <b>${esc(U.view)}</b>`;
+}
+function renderTop(){
+  $('#crumb').innerHTML = crumbText();
+  const s = $('#q'); s.placeholder = U.view==='Catalogue' && !U.pid ? 'Search catalogue' : 'Search projects or clients';
+  if(s.value !== U.q) s.value = U.q;
+}
+function renderToast(){ const t = $('#toast'); if(!t) return; t.hidden = !U.toast; t.innerHTML = U.toast ? ic('ok') + `<span>${esc(U.toast)}</span>` : ''; }
+
+/* ---------- Views ---------- */
+function vProjects(){
+  const list = filtered();
+  const cols = inArea().some(p=>p.stage===4) ? 5 : 4;
+  const pipeline = list.reduce((a,p)=>a+p.value,0);
+  const sumStage = i => list.filter(p=>p.stage===i).reduce((a,p)=>a+p.value,0);
+  const metric = (l,v) => `<div class="metric"><span class="label">${l}</span><b>${v}</b></div>`;
+  const note = p => {
+    if(p.stage===2) return `<span class="card-note">${p.approval==='Technical' ? 'Technical review pending, commercial follows.' : 'Commercial approval pending.'}</span>`;
+    if(p.stage===1 && p.rejection) return `<span class="card-note">Changes requested: ${esc(p.rejection)}</span>`;
+    if(p.stage===3 && p.signed && !p.counter) return `<span class="card-note info">Customer signed. Countersignature pending.</span>`;
+    return '';
+  };
+  const board = STAGES.slice(0, cols).map((st,i) => {
+    const items = list.filter(p=>p.stage===i);
+    return `<section class="col" style="--tone:${toneVar(i)}" aria-label="${esc(st)}">
+      <div class="col-head"><span class="label"><span class="sq"></span>${esc(st)} <span class="muted">${items.length}</span></span><span class="label">${money(sumStage(i))}</span></div>
+      ${items.map(p=>`<button type="button" class="card ${p.stage===2?'flag':''}" data-act="open" data-id="${p.id}">
+        <span class="card-t">${esc(p.name)}</span><span class="card-c">${esc(p.client)}</span>
+        <span class="card-v">${money(p.value)}</span>
+        <span class="card-f"><span class="ini" title="Owner">${esc(p.owner)}</span><span class="label">Due ${fmtDate(p.due)}</span></span>${note(p)}</button>`).join('') || `<p class="empty-col">${U.q ? 'No matches at this stage' : 'No projects at this stage'}</p>`}
+    </section>`;
+  }).join('');
+  return pageHead('Commercial pipeline', 'Every live quote from intake to signature', btn('Export','exportCsv',{cls:'secondary',icon:'down'}) + btn('New project','newProject',{icon:'plus'}))
+    + `<div class="metrics">${metric('Active projects', list.length)}${metric('Pipeline value', money(pipeline))}${metric('In approval', money(sumStage(2)))}${metric('Awaiting signature', money(sumStage(3)))}</div>`
+    + (inArea().length ? `<div class="board-wrap"><div class="board" style="--cols:${cols}">${board}</div></div>` : emptyBox('folder','No projects in this area yet','Create the first project to start the pipeline for '+U.area+'.', btn('New project','newProject',{icon:'plus'})));
+}
+function vMyWork(){
+  const list = filtered().filter(p => U.role==='Technical approver' ? p.stage===2 && p.approval==='Technical'
+    : U.role==='Commercial approver' ? p.stage===2 && p.approval==='Commercial'
+    : U.role==='Delivery lead' ? p.stage===4
+    : U.role==='Sales author' ? [0,1,3].includes(p.stage) : p.stage<4).sort((a,b)=>a.due.localeCompare(b.due));
+  const next = p => p.stage===0 ? 'Review requirements' : p.stage===1 ? 'Finish pricing' : p.stage===2 ? p.approval+' decision' : p.stage===3 ? (p.signed ? 'Countersign' : 'Collect signature') : 'Plan delivery';
+  return pageHead('My work', `What needs your attention in ${esc(U.area)} · viewing as <b>${esc(U.role)}</b>`)
+    + (list.length ? `<div class="rows">${list.map(p=>`<button type="button" class="row" data-act="open" data-id="${p.id}">
+        <div class="grow"><h3>${esc(p.name)}</h3><div class="muted">${esc(p.client)}</div></div>
+        ${stagePill(p.stage)}<span class="label" style="min-width:120px">${esc(next(p))}</span><span class="num" style="min-width:110px">Due ${fmtDate(p.due)}</span>${ic('right')}</button>`).join('')}</div>`
+      : emptyBox('ok','You’re all caught up','Nothing is waiting on the '+U.role.toLowerCase()+' role right now. Switch the preview role to see other queues.'));
+}
+function vCatalogue(){
+  const q = U.q.trim().toLowerCase();
+  const items = S.catalogue.map((c,i)=>({...c,i})).filter(c=>c.area===U.area && (!q || (c.name+' '+c.brand+' '+c.category).toLowerCase().includes(q)));
+  const H = canSeeCost();
+  return pageHead('Catalogue', 'Products and quantity price brackets', btn('Import CSV','importCsv',{cls:'secondary',icon:'upload'}) + btn('Add product','addProduct',{icon:'plus'}))
+    + (items.length ? `<div class="table-wrap"><table class="data"><thead><tr><th>Product</th><th>Brand / category</th><th class="r">1–9 units</th><th class="r">10–49 units</th><th class="r">50+ units</th>${H?'<th class="r">Internal cost</th><th class="r">Margin</th>':''}<th aria-label="Actions"></th></tr></thead><tbody>
+      ${items.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td class="muted">${esc(c.brand)} / ${esc(c.category)}</td><td class="r num">${money(c.price)}</td><td class="r num">${money(bracket(c.price,10))}</td><td class="r num">${money(bracket(c.price,50))}</td>${H?`<td class="r num">${money(c.cost)}</td><td class="r num">${c.price?((c.price-c.cost)/c.price*100).toFixed(1):0}%</td>`:''}<td class="r"><button type="button" class="iconbtn" data-act="delProduct" data-i="${c.i}" aria-label="Remove ${esc(c.name)}">${ic('x')}</button></td></tr>`).join('')}
+      </tbody></table></div>` : emptyBox('layers', q ? 'No products match your search' : 'No products yet', q ? 'Try a different product, brand or category.' : 'Add a product or import a CSV to build this area’s catalogue.'))
+    + `<div class="notice">${ic('info')}<span>Prices are copied into each quote line when added. Changing the catalogue never rewrites existing quotes.${H?'':' Internal costs are hidden for the '+esc(U.role)+' role.'}</span></div>`;
+}
+function vApprovals(){
+  const list = filtered().filter(p=>p.stage===2);
+  const may = p => U.role==='Administrator' || U.role===p.approval+' approver';
+  return pageHead('Approvals', 'Technical review comes before commercial approval')
+    + (list.length ? `<div class="rows">${list.map(p=>`<div class="row"><div class="grow"><h3>${esc(p.name)}</h3><div class="muted">${esc(p.client)} · Revision ${p.rev}</div></div>
+      <span class="pill warn">${esc(p.approval)} review</span><span class="label">${esc(p.approval==='Technical'?techOwner():commOwner())}</span><span class="num" style="min-width:100px;text-align:right">${money(p.value)}</span>
+      ${btn(may(p)?'Review quote':'View quote','review',{cls:may(p)?'sm':'sm quiet',data:`data-id="${p.id}"`})}</div>`).join('')}</div>`
+      : emptyBox('check','No approvals waiting','Quotes appear here once an author submits them for technical review.'));
+}
+function vTenders(){
+  const list = S.tenders.filter(t=>t.area===U.area);
+  return pageHead('Tenders', 'Sealed supplier tenders ' + phase2, btn('New tender','newTender',{icon:'plus'}))
+    + `<div class="notice">${ic('lock')}<span>Supplier views are simulated. Bid amounts stay sealed until you close the tender.</span></div>`
+    + (list.length ? list.map(t=>{
+      const n = Object.keys(t.bids).length;
+      return `<section class="panel"><div class="sec-head"><div><h2 class="sec">${esc(t.name)}</h2><div class="muted">Closes <span class="num">${fmtDate(t.deadline)}</span> · ${n}/${t.suppliers.length} responses</div></div>
+        <div class="actions">${t.status==='Open'?'<span class="pill warn">Open</span>':t.awarded?'<span class="pill good">Awarded</span>':'<span class="pill">Closed</span>'}${btn('Preview supplier portal','portal',{cls:'secondary sm',data:`data-id="${t.id}"`,icon:'eye'})}</div></div>
+        <div class="table-wrap"><table class="data"><thead><tr><th>Supplier</th><th>Response</th><th class="r">Bid</th><th class="r">Decision</th></tr></thead><tbody>
+        ${t.suppliers.map(s=>`<tr><td>${esc(s)}</td><td>${t.bids[s]?'<span class="pill good">Received</span>':'<span class="pill">Awaiting</span>'}</td>
+          <td class="r num">${t.status==='Open' ? (t.bids[s] ? ic('lock')+' Sealed' : '—') : (t.bids[s] ? money(t.bids[s]) : 'No response')}</td>
+          <td class="r">${t.status==='Open' ? '<span class="muted">After close</span>' : t.awarded===s ? '<span class="pill good">Awarded</span>' : btn('Award','award',{cls:'secondary sm',data:`data-id="${t.id}" data-s="${esc(s)}"`,disabled:!t.bids[s]||!!t.awarded})}</td></tr>`).join('')}
+        </tbody></table></div>
+        ${t.status==='Open'?`<div class="actions">${btn('Close tender and unseal bids','closeTender',{cls:'secondary',data:`data-id="${t.id}"`,icon:'lock'})}</div>`:''}</section>`;
+    }).join('') : emptyBox('file','No tenders in this area','Create a sealed tender to collect supplier prices.'));
+}
+function vPlanning(){
+  const list = filtered().filter(p=>p.stage===4);
+  if(!list.length) return pageHead('Planning','Tasks, milestones and dependencies ' + phase2) + emptyBox('calendar','No orders in delivery yet','Complete both signatures and hand a project over to start planning its delivery.', btn('Go to projects','nav',{data:'data-v="Projects"',cls:'secondary'}));
+  return pageHead('Planning','Tasks, milestones and dependencies ' + phase2) + list.map(p=>{
+    const ts = p.tasks;
+    const starts = ts.map(t=>+new Date(t.start)), ends = ts.map(t=>+new Date(t.end));
+    const min = Math.min(...starts), max = Math.max(...ends), span = Math.max(86400000, max-min);
+    const pct = v => ((v-min)/span*100).toFixed(2);
+    const done = ts.filter(t=>t.done).length;
+    return `<section class="panel"><div class="sec-head"><div><h2 class="sec">${esc(p.name)}</h2><div class="muted"><span class="num">${esc(p.order||'SO-'+p.id)}</span> · ${esc(p.deliveryOwner||'Marcus Lee')} · ${done}/${ts.length} complete</div></div>
+      <div class="actions">${btn('Open project','open',{cls:'quiet sm',data:`data-id="${p.id}"`})}${btn('Add task or milestone','addTask',{cls:'secondary sm',data:`data-id="${p.id}"`,icon:'plus'})}</div></div>
+      ${ts.length ? `<div class="rows">${ts.map(t=>{ const dep = t.dep ? ts.find(x=>String(x.id)===String(t.dep)) : null; return `<div class="row">
+        <input type="checkbox" id="task-${t.id}" data-change="task" data-pid="${p.id}" data-tid="${t.id}" ${t.done?'checked':''} style="width:18px;height:18px;accent-color:var(--accent)">
+        <label for="task-${t.id}" class="grow"><h3>${esc(t.name)}</h3><div class="muted">${esc(t.owner)} · ${t.milestone?'Milestone':'Task'}${dep?' · Depends on '+esc(dep.name):''}</div></label>
+        <span class="num">${fmtDate(t.start)} → ${fmtDate(t.end)}</span>${t.done?'<span class="pill good">Complete</span>':'<span class="pill">Planned</span>'}
+        <button type="button" class="iconbtn" data-act="delTask" data-pid="${p.id}" data-tid="${t.id}" aria-label="Remove ${esc(t.name)}">${ic('x')}</button></div>`; }).join('')}</div>
+        <h3 class="label">Timeline</h3><div class="gantt">${ts.map(t=>{ const s=+new Date(t.start), e=+new Date(t.end);
+          return `<div class="g-row"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.name)}</span><div class="g-track">${t.milestone?`<i class="g-ms" style="left:${pct(e)}%"></i>`:`<i class="g-bar ${t.done?'done':''}" style="left:${pct(s)}%;width:${Math.max(1,(e-s)/span*100).toFixed(2)}%"></i>`}</div></div>`; }).join('')}
+          <div class="g-scale"><span>${fmtDate(new Date(min).toISOString().slice(0,10))}</span><span>${fmtDate(new Date(max).toISOString().slice(0,10))}</span></div></div>`
+        : `<p class="muted">No tasks yet. Add the first delivery task to start the plan.</p>`}</section>`;
+  }).join('');
+}
+function vReports(){
+  const list = filtered(); const tot = list.reduce((a,p)=>a+p.value,0);
+  const byStage = STAGES.map((s,i)=>({s,i,v:list.filter(p=>p.stage===i).reduce((a,p)=>a+p.value,0),n:list.filter(p=>p.stage===i).length}));
+  const maxV = Math.max(1, ...byStage.map(b=>b.v));
+  const won = list.filter(p=>p.stage===4);
+  const metric = (l,v) => `<div class="metric"><span class="label">${l}</span><b>${v}</b></div>`;
+  const margin = list.length ? list.reduce((a,p)=>a+(total(p)?(total(p)-cost(p))/total(p):0),0)/list.length*100 : 0;
+  return pageHead('Reports', 'Live figures for ' + esc(U.area) + ' ' + phase2, btn('Export pipeline CSV','exportCsv',{cls:'secondary',icon:'down'}))
+    + `<div class="metrics">${metric('Total pipeline', money(tot))}${metric('Orders handed over', won.length)}${metric('Awaiting approval', list.filter(p=>p.stage===2).length)}${canSeeCost()?metric('Average quoted margin', margin.toFixed(1)+'%'):metric('Awaiting signature', list.filter(p=>p.stage===3).length)}</div>`
+    + `<section class="panel"><h2 class="sec">Value by stage</h2><div>${byStage.map(b=>`<div class="bar-row" style="--tone:${toneVar(b.i)}"><span>${esc(b.s)}</span><div class="bar" role="img" aria-label="${esc(b.s)} ${money(b.v)}"><i style="width:${(b.v/maxV*100).toFixed(1)}%"></i></div><span class="num" style="text-align:right">${money(b.v)}</span><span class="num muted cnt" style="text-align:right">${b.n}</span></div>`).join('')}</div></section>`;
+}
+function eventsList(evts){
+  if(!evts.length) return emptyBox('clock','No activity yet','Create or update a project and every change will be recorded here.');
+  return `<div class="rows">${evts.map(e=>{ const p = S.projects.find(x=>x.id===e.projectId);
+    return `<div class="event">${ic('clock')}<div><h3 style="font-size:14px;font-weight:600">${esc(e.action)}</h3><div class="muted">${esc(e.who)}${p?' · '+esc(p.name):''}${e.example?' · <span class="pill">Example</span>':''}</div>${e.before||e.after?`<div class="delta">${e.before?esc(e.before)+' → ':''}${esc(e.after)}</div>`:''}</div><span class="when">${esc(e.date)}</span></div>`; }).join('')}</div>`;
+}
+function vAudit(){
+  return pageHead('Audit trail','Read-only record of every change in ' + esc(U.area), btn('Export audit','exportAudit',{cls:'secondary',icon:'down'}))
+    + eventsList(S.events.filter(e=>e.area===U.area));
+}
+function vAdmin(){
+  const head = pageHead('Administration','People, permissions and workspace settings');
+  if(U.role!=='Administrator') return head + `<div class="notice warn">${ic('lock')}<span>Administrator access required. Switch the preview role to Administrator to change these settings.</span></div>`;
+  const st = areaSet(); const f = features(); const names = S.users.map(u=>u.name);
+  const opt = (list, sel) => list.map(n=>`<option ${n===sel?'selected':''}>${esc(n)}</option>`).join('');
+  return head + `
+  <section class="panel"><div class="sec-head"><h2 class="sec">Users and roles</h2>${btn('Add user','addUser',{cls:'secondary sm',icon:'plus'})}</div>
+    <div class="rows">${S.users.map((u,i)=>`<div class="row"><span class="ini">${esc(initials(u.name))}</span><div class="grow"><h3>${esc(u.name)}</h3><div class="muted">${esc(u.email)}</div></div>
+      <select class="select" id="role-${i}" data-change="userRole" data-i="${i}" aria-label="Role for ${esc(u.name)}">${opt(ROLES,u.role)}</select>
+      <button type="button" class="iconbtn" data-act="delUser" data-i="${i}" aria-label="Remove ${esc(u.name)}" ${S.users.length<2?'disabled':''}>${ic('x')}</button></div>`).join('')}</div></section>
+  <div class="two even">
+    <section class="panel"><div class="sec-head"><h2 class="sec">Business area settings</h2>${btn('Add business area','addArea',{cls:'secondary sm',icon:'plus'})}</div>
+      <p class="muted">${esc(U.area)} keeps its own records and approval routing.</p>
+      <div class="field"><label for="techOwner">Technical approval owner</label><select id="techOwner" data-change="owner" data-k="technical">${opt(names, techOwner())}</select></div>
+      <div class="field"><label for="commOwner">Commercial approval owner</label><select id="commOwner" data-change="owner" data-k="commercial">${opt(names, commOwner())}</select></div>
+      <h3 class="label">Feature controls · Phase two</h3>
+      <div>${FEATURES.map(k=>`<label class="switch-row" for="feat-${k}"><span>${k}</span><input type="checkbox" id="feat-${k}" data-change="feature" data-k="${k}" ${f[k]?'checked':''}></label>`).join('')}</div>
+    </section>
+    <section class="panel"><h2 class="sec">Document presentation</h2>
+      <form class="form" data-form="presentation">
+        <div class="field"><label for="tpl">Template</label><select id="tpl" name="template">${opt(['Standard proposal','Compact quotation','Detailed infrastructure proposal'], st.template||'Standard proposal')}</select></div>
+        <div class="grid2"><div class="field"><label for="theme">Brand colour</label><input type="color" id="theme" name="theme" value="${esc(st.theme||'#1B1F23')}"></div>
+          <div class="field"><label for="logo">Business logo</label><input type="file" id="logo" accept="image/*" data-change="logo"><span class="hint">${st.logo||U.pendingLogo?'Logo ready':'PNG or SVG, shown on documents'}</span></div></div>
+        <div class="field"><label for="contact">Contact block</label><input id="contact" name="contact" value="${esc(st.contact||'Commercial team · London, United Kingdom')}"></div>
+        <div class="field"><label for="footer">Document footer</label><input id="footer" name="footer" value="${esc(st.footer||'Private and confidential')}"></div>
+        <div class="actions">${btn('Save presentation','',{type:'submit'})}${btn('Preview document','previewSample',{cls:'quiet'})}</div>
+      </form></section>
+  </div>
+  <section class="panel"><h2 class="sec">Identity and operational readiness</h2>
+    <div class="notice">${ic('info')}<span>These are configuration previews. Production controls need the FastAPI backend, an identity provider and the AWS deployment.</span></div>
+    <div class="two even">
+      <form class="form" data-form="sso"><h3 class="label">Corporate SSO</h3>
+        <div class="grid2"><div class="field"><label for="proto">Protocol</label><select id="proto" name="proto">${opt(['OpenID Connect','SAML 2.0'], st.sso&&st.sso.proto)}</select></div>
+        <div class="field"><label for="prov">Provider</label><select id="prov" name="prov">${opt(['Microsoft Entra ID','Okta','Google Workspace'], st.sso&&st.sso.prov)}</select></div></div>
+        <div class="field"><label for="issuer">Issuer or metadata URL</label><input id="issuer" name="issuer" type="url" placeholder="https://identity.example.com" value="${esc(st.sso&&st.sso.issuer||'')}"></div>
+        <div class="field"><label for="client">Client ID</label><input id="client" name="client" placeholder="Provider client ID" value="${esc(st.sso&&st.sso.client||'')}"></div>
+        <div class="actions">${btn('Save configuration preview','',{type:'submit',cls:'secondary'})}</div></form>
+      <div class="panel soft"><h3 class="label">Production acceptance checklist</h3><div>${['MFA and session expiry','Database row-level isolation','Private encrypted storage and expiring links','Malware scanning and quarantine','Background jobs and retries','Backups with tested restore','Monitoring and incident alerts','CI dependency, container and secret scanning','Automated request-to-signed-order tests','London AWS environment and runbooks'].map(x=>`<div class="kv" style="padding:8px 0;border-top:1px solid var(--line)"><span>${x}</span><span class="pill">Backend required</span></div>`).join('')}</div></div>
+    </div></section>
+  <section class="panel"><div class="sec-head"><div><h2 class="sec">Demo data</h2><p class="muted">Everything you change is saved in this browser.</p></div>${btn('Reset sample data','resetAsk',{cls:'secondary'})}</div></section>`;
+}
+
+/* ---------- Project detail ---------- */
+const TABS = ['Overview','Quote','Approvals','Documents','Signing','Handover','Activity'];
+const locked = p => p.stage>=2;
+const hasApprovedDoc = p => p.documents.some(d=>d.status==='Approved' && d.rev===p.rev);
+function nextStep(p){
+  return p.stage===0 ? 'Review the requirements and prepare the first quote.'
+    : p.stage===1 ? (p.rejection ? `Changes were requested: “${p.rejection}”. Update the quote and resubmit.` : 'Complete pricing and submit for technical review.')
+    : p.stage===2 ? `${p.approval} approval is needed before the quote can be shared.`
+    : p.stage===3 ? (!hasApprovedDoc(p) ? 'Generate the approved customer document, then send it for signature.' : !p.signed ? 'Collect the customer’s signature.' : !p.counter ? 'Countersign to complete the envelope.' : 'Create the sales order and hand over to delivery.')
+    : 'Coordinate operational delivery in Planning.';
+}
+function vDetail(p){
+  const head = `<button type="button" class="link back" data-act="back">${ic('left')}All projects</button>
+    <div class="page-head"><div><div class="label">PRJ-${p.id} / ${esc(p.client)}</div><h1 style="margin-top:6px">${esc(p.name)}</h1>
+    <div class="sub">${stagePill(p.stage)}<span class="pill">Revision ${p.rev}</span><span class="num">${money(p.value)}</span></div></div>
+    <div class="actions">${btn('Edit project','editProject',{cls:'secondary',icon:'pen'})}</div></div>
+    <div class="tabs" role="tablist">${TABS.map(t=>`<button type="button" role="tab" aria-selected="${U.tab===t}" data-act="tab" data-v="${t}">${t}</button>`).join('')}</div>`;
+  return head + ({Overview:tOverview,Quote:tQuote,Approvals:tApprovals,Documents:tDocuments,Signing:tSigning,Handover:tHandover,Activity:tActivity}[U.tab]||tOverview)(p);
+}
+function tOverview(p){
+  return `<div class="two"><section class="panel"><h2 class="sec">Project brief</h2><p>${esc(p.brief || 'Supply and install resilient infrastructure, coordinate technical review, and prepare the commercial proposal for client acceptance.')}</p>
+    <div class="facts"><div><span class="label">Client</span>${esc(p.client)}</div><div><span class="label">Due date</span><span class="num">${fmtDate(p.due)}</span></div><div><span class="label">Business area</span>${esc(p.area)}</div><div><span class="label">Project owner</span><span><span class="ini">${esc(p.owner)}</span></span></div></div>
+    <div class="notice ${p.rejection&&p.stage===1?'warn':''}">${ic('info')}<span><b>Next step.</b> ${esc(nextStep(p))}</span></div>
+    <div class="actions">${btn('Continue project','continue',{icon:'right'})}</div></section>
+    <section class="panel soft"><h2 class="sec">Project journey</h2><div class="journey">${STAGES.map((s,i)=>`<div class="step ${i<p.stage?'done':i===p.stage?'now':''}"><span class="dot"></span><span>${esc(s)}</span><span class="label">${i<p.stage?'Complete':i===p.stage?'Current':'Upcoming'}</span></div>`).join('')}</div></section></div>`;
+}
+function tQuote(p){
+  const H = canSeeCost(), L = locked(p), sub = subtotal(p), tot = total(p), c = cost(p);
+  const rows = p.lines.map((l,i)=>`<tr><td>${esc(l.name)}${l.basePrice?`<div class="hint">List ${money(l.basePrice)} · bracket applied</div>`:''}</td>
+    <td class="r"><input type="number" min="1" step="1" id="q-${i}" aria-label="${esc(l.name)} quantity" data-change="line" data-i="${i}" data-k="qty" value="${l.qty}" ${L?'disabled':''}></td>
+    ${H?`<td class="r"><input type="number" min="0" step="0.01" id="c-${i}" aria-label="${esc(l.name)} internal cost" data-change="line" data-i="${i}" data-k="cost" value="${l.cost||0}" ${L?'disabled':''}></td>`:''}
+    <td class="r"><input type="number" min="0" step="0.01" id="p-${i}" aria-label="${esc(l.name)} unit price" data-change="line" data-i="${i}" data-k="price" value="${l.price}" ${L?'disabled':''}></td>
+    <td class="r num">${money(l.qty*l.price)}</td>
+    <td class="r"><button type="button" class="iconbtn" data-act="delLine" data-i="${i}" aria-label="Remove ${esc(l.name)}" ${L?'disabled':''}>${ic('x')}</button></td></tr>`).join('');
+  return `<div class="sec-head"><h2 class="sec">Quote builder</h2>${btn('Create new revision','newRevision',{cls:'secondary sm',disabled:p.stage===4,title:p.stage===4?'Handed-over orders cannot be revised':''})}</div>
+    ${L?`<div class="notice warn">${ic('lock')}<span>Revision ${p.rev} is locked while it is ${p.stage===2?'in approval':p.stage===3?'with the customer':'in delivery'}. Create a new revision to change pricing.</span></div>`:''}
+    <div class="two"><section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="field"><label for="narr">Customer narrative</label><textarea id="narr" data-change="narrative" placeholder="Describe the proposed solution and deliverables" ${L?'disabled':''}>${esc(p.narrative||'')}</textarea></div>
+      ${p.lines.length?`<div class="table-wrap"><table class="data quote"><thead><tr><th>Description</th><th class="r">Qty</th>${H?'<th class="r">Internal cost</th>':''}<th class="r">Unit price</th><th class="r">Total</th><th aria-label="Actions"></th></tr></thead><tbody>${rows}</tbody></table></div>`
+        : emptyBox('layers','No quote lines yet','Add items from the catalogue or a custom line to start pricing.')}
+      <div class="actions">${btn('Add catalogue item','addCatItem',{cls:'secondary',disabled:L,icon:'plus'})}${btn('Add custom line','addCustom',{cls:'quiet',disabled:L,icon:'plus'})}</div>
+      <h2 class="sec">Revision history</h2>
+      ${p.revisions.length?`<div class="rows">${p.revisions.map((r,i)=>`<div class="row"><div class="grow"><h3>Revision ${r.rev}</h3><div class="muted">${r.lines.length} lines · ${money(r.lines.reduce((a,l)=>a+l.qty*l.price,0)*(1-(r.discount||0)/100))}${r.reason?' · '+esc(r.reason):''}</div></div>${btn('Compare with current','compare',{cls:'quiet sm',data:`data-i="${i}"`})}</div>`).join('')}</div>`
+        : `<p class="muted">This is the first revision. Earlier versions stay available here once you revise.</p>`}
+    </section>
+    <section class="panel soft"><h2 class="sec">Commercial summary</h2>
+      <div class="kv"><span>Subtotal</span><b class="num">${money(sub)}</b></div>
+      <div class="field"><label for="disc">Discount (%)</label><input type="number" id="disc" min="0" max="100" step="0.5" data-change="discount" value="${p.discount||0}" ${L?'disabled':''}></div>
+      <div class="kv" style="border-top:1px solid var(--line);padding-top:12px"><b>Customer total</b><b class="num" style="font-size:24px;font-weight:500">${money(tot)}</b></div>
+      <span class="hint">Excluding VAT</span>
+      ${H?`<div class="panel" style="padding:14px;gap:8px"><span class="label">${ic('lock')} Internal only</span><div class="kv"><span>Cost</span><b class="num">${money(c)}</b></div><div class="kv"><span>Margin</span><b class="num">${tot?((tot-c)/tot*100).toFixed(1):'0.0'}%</b></div></div>`:''}
+      ${btn('Submit for technical review','submitQuote',{disabled:L||!p.lines.length})}
+      ${btn('Preview customer document','previewQuote',{cls:'quiet',icon:'eye'})}
+    </section></div>`;
+}
+function tApprovals(p){
+  const row = (kind, i) => {
+    const owner = kind==='Technical' ? techOwner() : commOwner();
+    const approved = p.stage>2 || (kind==='Technical' && p.stage===2 && p.approval==='Commercial');
+    const active = p.stage===2 && p.approval===kind;
+    const may = U.role==='Administrator' || U.role===kind+' approver';
+    const status = approved ? 'Approved' : active ? 'Awaiting decision' : 'Pending';
+    return `<div class="appr"><span class="mark ${approved?'ok':active?'now':''}">${ic(approved?'ok':'check')}</span>
+      <div><h3 style="font-size:15px;font-weight:600">${kind} approval</h3><div class="muted">${esc(owner)} · ${status}</div>${active&&!may?`<div class="hint">Switch the preview role to ${kind} approver or Administrator to decide.</div>`:''}</div>
+      ${active?`<div class="actions">${btn('Approve','approve',{disabled:!may,data:`data-k="${kind}"`,icon:'ok'})}${btn('Request changes','rejectAsk',{cls:'secondary',disabled:!may,data:`data-k="${kind}"`})}</div>`:`<span class="pill ${approved?'good':''}">${status}</span>`}</div>`;
+  };
+  return `<div><h2 class="sec">Approval routing</h2><p class="muted" style="margin-top:4px">Each decision applies to revision ${p.rev} only. Requesting changes returns the quote to its author as a new revision.</p></div>
+    ${p.stage<2?`<div class="notice">${ic('info')}<span>This quote hasn’t been submitted yet. Finish pricing on the Quote tab and submit it for technical review.</span></div>`:''}
+    <div class="rows">${row('Technical',0)}${row('Commercial',1)}</div>`;
+}
+function tDocuments(p){
+  return `<div class="sec-head"><div><h2 class="sec">Controlled documents</h2><p class="muted">Customer-safe snapshots. Internal costs and margins are never included.</p></div>${btn(U.busy?'Preparing snapshot…':'Generate document','genDoc',{disabled:U.busy||!p.lines.length,icon:'file'})}</div>
+    ${p.stage<3?`<div class="notice warn">${ic('info')}<span>Documents generated before commercial approval are marked as drafts.</span></div>`:''}
+    ${p.documents.length?`<div class="rows">${p.documents.map(d=>`<div class="row">${ic('file')}<div class="grow"><h3>Quotation ${esc(d.ref)} · v${d.rev}</h3><div class="muted"><span class="num">${esc(d.date)}</span> · ${d.status==='Approved'?'<span class="pill good">Approved</span>':'<span class="pill warn">Draft</span>'} · Immutable snapshot</div></div>
+      <div class="actions">${btn('Open','openDoc',{cls:'quiet sm',data:`data-d="${d.id}"`,icon:'eye'})}${btn('PDF','pdf',{cls:'secondary sm',data:`data-d="${d.id}"`})}${btn('Word','docx',{cls:'secondary sm',data:`data-d="${d.id}"`})}${btn('HTML','html',{cls:'secondary sm',data:`data-d="${d.id}"`})}</div></div>`).join('')}</div>`
+      : emptyBox('file','No documents yet','Generate a versioned snapshot of this quote to share with the customer.')}
+    <section class="panel"><div class="sec-head"><h2 class="sec">Supporting files</h2><label class="btn secondary sm" for="upl">${ic('upload')}Upload file</label></div>
+      <input type="file" id="upl" data-change="upload" hidden>
+      ${(p.files||[]).length?`<div class="rows">${p.files.map((f,i)=>`<div class="row"><div class="grow">${esc(f.name)}</div><span class="pill ${/Quarantined/.test(f.status)?'warn':''}">${esc(f.status)}</span><button type="button" class="iconbtn" data-act="delFile" data-i="${i}" aria-label="Remove ${esc(f.name)}">${ic('x')}</button></div>`).join('')}</div>`:'<p class="muted">No supporting files yet. Uploads are recorded for the demo; no real malware scan runs.</p>'}
+    </section>`;
+}
+function tSigning(p){
+  const ready = p.stage>=3 && hasApprovedDoc(p);
+  return `<h2 class="sec">Signature envelope</h2><div class="notice">${ic('info')}<span>Simulated signing flow. No legal signature is created and no email is sent.</span></div>
+    <div class="two"><section class="panel">
+      <div class="appr" style="padding:0"><span class="mark ${p.signed?'ok':ready?'now':''}">${ic(p.signed?'ok':'sign')}</span><div><h3 style="font-size:15px;font-weight:600">1. Customer signature</h3><div class="muted">${esc(p.client)}${p.signer?' · '+esc(p.signer):''}</div></div>
+        ${btn(p.signed?'Customer signed':'Open signing view','signAsk',{disabled:!ready||p.signed,cls:p.signed?'quiet':''})}</div>
+      ${!ready&&!p.signed?`<p class="hint">${p.stage<3?'The quote needs technical and commercial approval first.':'Generate the approved document for revision '+p.rev+' on the Documents tab first.'}</p>`:''}
+      <div class="appr" style="padding:16px 0 0;border-top:1px solid var(--line-2)"><span class="mark ${p.counter?'ok':p.signed?'now':''}">${ic(p.counter?'ok':'pen')}</span><div><h3 style="font-size:15px;font-weight:600">2. Internal countersignature</h3><div class="muted">Callum Smith · Authorised signatory</div>${p.signed&&!p.counter&&U.role!=='Administrator'?'<div class="hint">Only an Administrator can countersign.</div>':''}</div>
+        ${btn(p.counter?'Countersigned':'Countersign','countersign',{disabled:!p.signed||p.counter||U.role!=='Administrator',cls:p.counter?'quiet':''})}</div>
+    </section>
+    <section class="panel soft"><h2 class="sec">Evidence</h2>
+      <div class="kv"><span>Customer</span><span class="num">${p.signed?esc(p.signedAt||'Recorded'):'Awaiting'}</span></div>
+      <div class="kv"><span>Countersignature</span><span class="num">${p.counter?esc(p.counterAt||'Recorded'):'Pending'}</span></div>
+      ${btn('Download certificate','cert',{cls:'secondary',disabled:!p.counter,icon:'down'})}
+    </section></div>`;
+}
+function tHandover(p){
+  if(p.stage!==4) return `<div><h2 class="sec">Sales order and handover</h2><p class="muted" style="margin-top:4px">Accepted scope, approved pricing and delivery ownership move to the delivery team together.</p></div>
+    ${!p.counter?`<div class="notice">${ic('info')}<span>Both signatures are needed before a sales order can be created.</span></div>`:''}
+    <div class="actions">${btn('Create sales order and hand over','handover',{disabled:!p.counter,icon:'box'})}</div>`;
+  return `<h2 class="sec">Sales order and handover</h2><div class="notice good">${ic('ok')}<span><b class="num">${esc(p.order||'SO-'+p.id)}</b> · Ready for delivery · ${money(p.value)}</span></div>
+    <form class="form panel" data-form="handover" style="max-width:640px">
+      <div class="field"><label for="dOwner">Delivery owner</label><select id="dOwner" name="deliveryOwner">${S.users.map(u=>`<option ${u.name===(p.deliveryOwner||'Marcus Lee')?'selected':''}>${esc(u.name)}</option>`).join('')}</select></div>
+      <div class="field"><label for="hNotes">Handover notes</label><textarea id="hNotes" name="handover" placeholder="Site access, key contacts, lead times">${esc(p.handover||'')}</textarea></div>
+      <div class="actions">${btn('Save handover','',{type:'submit'})}${btn('Open delivery planning','nav',{cls:'secondary',data:'data-v="Planning"'})}${btn('Download order PDF','orderPdf',{cls:'quiet',icon:'down'})}</div>
+    </form>`;
+}
+function tActivity(p){ return `<h2 class="sec">Activity</h2>` + eventsList(S.events.filter(e=>e.area===U.area && e.projectId===p.id)); }
+
+/* ---------- Modals ---------- */
+const field = (label, name, o={}) => `<div class="field"><label for="m-${name}">${esc(label)}</label>${o.textarea?`<textarea id="m-${name}" name="${name}" ${o.required?'required':''} placeholder="${esc(o.ph||'')}">${esc(o.value||'')}</textarea>`
+  : o.options?`<select id="m-${name}" name="${name}">${o.options.map(x=>`<option value="${esc(x.v!==undefined?x.v:x)}" ${String(x.v!==undefined?x.v:x)===String(o.value)?'selected':''}>${esc(x.l||x)}</option>`).join('')}</select>`
+  : `<input id="m-${name}" name="${name}" type="${o.type||'text'}" ${o.required?'required':''} ${o.min!==undefined?`min="${o.min}"`:''} ${o.step?`step="${o.step}"`:''} ${o.pattern?`pattern="${o.pattern}"`:''} placeholder="${esc(o.ph||'')}" value="${esc(o.value!==undefined?o.value:'')}">`}${o.hint?`<span class="hint">${esc(o.hint)}</span>`:''}</div>`;
+function modalBody(){
+  const m = U.modal, p = cur(), H = canSeeCost();
+  if(!m) return '';
+  if(m.t==='project'){ const e = m.edit ? p : {};
+    return `<h2>${m.edit?'Edit project details':'New project'}</h2><form class="form" data-form="project">
+      ${field('Project name','name',{required:true,value:e.name})}${field('Client or organisation','client',{required:true,value:e.client})}
+      <div class="grid2">${field('Required delivery date','due',{type:'date',required:true,value:e.due||'2026-10-15'})}${field('Owner initials','owner',{required:true,value:e.owner||'CS',hint:'Shown on the board card'})}</div>
+      ${field('Requirements or brief','brief',{textarea:true,required:true,value:e.brief,ph:'What the client needs, scope, constraints'})}
+      <div class="actions">${btn(m.edit?'Save changes':'Create project','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`; }
+  if(m.t==='catItem'){ const items = S.catalogue.filter(c=>c.area===U.area);
+    return `<h2>Add from catalogue</h2><p class="muted">Choose an item and quantity. The price bracket for that quantity is copied into the quote.</p>
+      ${items.length?items.map((c,i)=>`<form class="cat-add" data-form="catItem" data-name="${esc(c.name)}"><div><b>${esc(c.name)}</b><div class="hint">${esc(c.brand)} · ${money(c.price)} list · from ${money(bracket(c.price,50))} at 50+</div></div>
+        <input type="number" name="qty" min="1" value="1" aria-label="${esc(c.name)} quantity" id="ci-${i}">${btn('Add','',{type:'submit',cls:'sm'})}</form>`).join('') : `<p class="muted">This area has no catalogue products yet.</p>`}`; }
+  if(m.t==='custom' || m.t==='product'){ const cu = m.t==='custom';
+    return `<h2>${cu?'Custom quote line':'Add catalogue product'}</h2><form class="form" data-form="${m.t}">
+      ${field('Description','name',{required:true})}
+      ${cu?field('Quantity','qty',{type:'number',min:1,value:1,required:true}):`<div class="grid2">${field('Brand','brand',{required:true})}${field('Category','category',{required:true})}</div>`}
+      <div class="grid2">${H||!cu?field('Internal unit cost (£)','cost',{type:'number',min:0,step:'0.01',required:true}):''}${field('Customer unit price (£)','price',{type:'number',min:0,step:'0.01',required:true})}</div>
+      <div class="actions">${btn(cu?'Add line':'Add product','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`; }
+  if(m.t==='reject') return `<h2>Request changes</h2><p class="muted">${esc(m.k)} review · revision ${p.rev}. The quote returns to its author as revision ${p.rev+1}.</p><form class="form" data-form="reject">
+      ${field('What needs to change?','reason',{textarea:true,required:true,ph:'Be specific so the author can act on it'})}<div class="actions">${btn('Return to author','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`;
+  if(m.t==='doc'){ const d = m.doc;
+    return `<div class="sec-head" style="padding-right:40px"><h2>${esc(m.title||'Customer document')}</h2><div class="actions">${btn('Download PDF','pdfModal',{cls:'secondary sm',icon:'down'})}${btn('Word','docxModal',{cls:'quiet sm'})}</div></div>
+      <div class="paper-wrap"><div class="paper">${docInner(d, m.kind)}</div></div>`; }
+  if(m.t==='compare'){ const r = p.revisions[m.i]; const names = [...new Set([...r.lines.map(l=>l.name), ...p.lines.map(l=>l.name)])];
+    const f = (ls,n) => { const l = ls.find(x=>x.name===n); return l ? l : null; };
+    return `<h2>Revision ${r.rev} compared with revision ${p.rev}</h2><div class="table-wrap"><table class="data"><thead><tr><th>Line</th><th class="r">Rev ${r.rev}</th><th class="r">Rev ${p.rev}</th><th class="r">Change</th></tr></thead><tbody>
+      ${names.map(n=>{ const a=f(r.lines,n), b=f(p.lines,n); const av=a?a.qty*a.price:0, bv=b?b.qty*b.price:0; return `<tr><td>${esc(n)}</td><td class="r num">${a?money(av):'—'}</td><td class="r num">${b?money(bv):'Removed'}</td><td class="r num">${!a?'New':(bv-av>=0?'+':'')+money(bv-av)}</td></tr>`; }).join('')}
+      <tr><td><b>Customer total</b></td><td class="r num"><b>${money(r.lines.reduce((x,l)=>x+l.qty*l.price,0)*(1-(r.discount||0)/100))}</b></td><td class="r num"><b>${money(total(p))}</b></td><td></td></tr></tbody></table></div>`; }
+  if(m.t==='sign') return `<div class="label">Customer signing view · Demo</div><h2>Review and sign</h2>
+      <div class="panel soft" style="gap:6px"><div class="kv"><span>${esc(p.client)}</span><span class="num">Q-${p.id} · Rev ${p.rev}</span></div><div class="kv"><b>Total excluding VAT</b><b class="num">${money(total(p))}</b></div></div>
+      <div class="notice warn">${ic('info')}<span>Demo only. This does not create a legally binding signature.</span></div>
+      <form class="form" data-form="sign">${field('Full name','signer',{required:true,ph:'Name as it should appear on the certificate'})}${field('Job title','title',{ph:'Optional'})}
+      <label class="check"><input type="checkbox" required id="m-agree">I have reviewed this quotation and accept it on behalf of ${esc(p.client)}.</label>
+      <div class="actions">${btn('Sign quotation','',{type:'submit',icon:'sign'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`;
+  if(m.t==='tender') return `<h2>Create sealed tender</h2><form class="form" data-form="tender">${field('Tender name','name',{required:true,ph:'e.g. Maple Road cabling package'})}
+      ${field('Closing date','deadline',{type:'date',required:true,value:'2026-10-09'})}${field('Invited suppliers','suppliers',{required:true,value:'Arbor Supply, Fieldline UK',hint:'Separate supplier names with commas'})}
+      <div class="actions">${btn('Create tender','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`;
+  if(m.t==='portal'){ const t = S.tenders.find(x=>x.id===m.id); const s = t.suppliers.includes(U.supplier) ? U.supplier : t.suppliers[0];
+    return `<div class="label">Isolated supplier view · Demo</div><h2>${esc(t.name)}</h2><p class="muted">Each supplier sees only their own response. Closes <span class="num">${fmtDate(t.deadline)}</span> · ${esc(t.status)}</p>
+      <div class="field"><label for="m-sup">Preview as supplier</label><select id="m-sup" data-change="supplier">${t.suppliers.map(x=>`<option ${x===s?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+      ${t.bids[s]?`<div class="notice good">${ic('ok')}<span>Your submitted bid: <b class="num">${money(t.bids[s])}</b>. Submitting again replaces it.</span></div>`:''}
+      <form class="form" data-form="bid" data-s="${esc(s)}">${field('Your total bid (£)','amount',{type:'number',min:1,step:'0.01',required:true})}
+      <div class="actions">${btn('Submit sealed response','',{type:'submit',disabled:t.status!=='Open'})}${btn('Close','close',{cls:'quiet'})}</div></form>`; }
+  if(m.t==='task'){ const pr = S.projects.find(x=>x.id===m.id);
+    return `<h2>Add to the delivery plan</h2><p class="muted">${esc(pr.name)}</p><form class="form" data-form="task">${field('Task name','name',{required:true,ph:'e.g. Site survey'})}
+      ${field('Owner','owner',{options:S.users.map(u=>u.name),value:pr.deliveryOwner||'Marcus Lee'})}
+      <div class="grid2">${field('Start','start',{type:'date',required:true,value:'2026-10-05'})}${field('End','end',{type:'date',required:true,value:'2026-10-09'})}</div>
+      ${field('Depends on','dep',{options:[{v:'',l:'No dependency'}].concat(pr.tasks.map(t=>({v:t.id,l:t.name}))),value:''})}
+      <label class="check"><input type="checkbox" name="milestone" id="m-ms">This is a milestone</label>
+      <div class="actions">${btn('Add to plan','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`; }
+  if(m.t==='user') return `<h2>Add a user</h2><form class="form" data-form="user">${field('Full name','name',{required:true})}${field('Email','email',{type:'email',required:true})}
+      ${field('Role','role',{options:ROLES,value:'Sales author'})}<p class="hint">Demo only. No invitation email is sent.</p><div class="actions">${btn('Add user','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`;
+  if(m.t==='area') return `<h2>Add business area</h2><p class="muted">Each area keeps its own projects, catalogue, tenders and approval routing.</p><form class="form" data-form="area">${field('Business area name','name',{required:true,ph:'e.g. Facilities'})}<div class="actions">${btn('Create area','',{type:'submit'})}${btn('Cancel','close',{cls:'quiet'})}</div></form>`;
+  if(m.t==='import') return `<h2>Import catalogue</h2><p class="muted">CSV columns: <span class="num">name, brand, category, cost, price</span>. Every row is checked before anything is imported.</p>
+      <div class="field"><label for="m-csv">CSV file</label><input type="file" id="m-csv" accept=".csv,text/csv" data-change="csv"></div>
+      ${m.error?`<div class="notice warn">${ic('info')}<span>${esc(m.error)}</span></div>`:''}
+      <div class="actions">${btn('Download template','csvTemplate',{cls:'secondary sm',icon:'down'})}${btn('Close','close',{cls:'quiet sm'})}</div>`;
+  if(m.t==='reset') return `<h2>Reset sample data?</h2><p class="muted">This replaces every project, quote, tender, user and audit event saved in this browser with the original sample records. It can’t be undone.</p>
+      <div class="actions">${btn('Reset sample data','reset')}${btn('Cancel','close',{cls:'quiet'})}</div>`;
+  if(m.t==='signout') return `<h2>Sign out?</h2><p class="muted">Your work stays saved in this browser.</p><div class="actions">${btn('Sign out','signOutConfirm')}${btn('Cancel','close',{cls:'quiet'})}</div>`;
+  return '';
+}
+function renderModal(){
+  const host = $('#modal');
+  if(!U.modal){ host.hidden = true; host.innerHTML=''; return; }
+  const wide = U.modal.t==='doc' || U.modal.t==='compare';
+  host.hidden = false;
+  host.innerHTML = `<section class="modal ${wide?'wide':''}" role="dialog" aria-modal="true" aria-label="Dialog"><button type="button" class="iconbtn x" data-act="close" aria-label="Close dialog">${ic('x')}</button>${modalBody()}</section>`;
+  const first = host.querySelector('input:not([type=hidden]):not([type=file]),textarea,select') || host.querySelector('.x');
+  if(first) setTimeout(()=>first.focus(), 20);
+}
+function openModal(m){ U.lastFocus = document.activeElement; U.modal = m; renderModal(); }
+function closeModal(){ U.modal = null; renderModal(); if(U.lastFocus && document.body.contains(U.lastFocus)) U.lastFocus.focus(); }
+
+/* ---------- Main render ---------- */
+function renderMain(){
+  const p = cur();
+  if(U.pid && !p) U.pid = null;
+  const f = features();
+  if(FEATURES.includes(U.view) && f[U.view]===false) U.view = 'Projects';
+  const v = p ? vDetail(p) : ({'My work':vMyWork,Projects:vProjects,Catalogue:vCatalogue,Approvals:vApprovals,Tenders:vTenders,Planning:vPlanning,Reports:vReports,Administration:vAdmin,'Audit trail':vAudit}[U.view]||vProjects)();
+  $('#content').innerHTML = v;
+  renderTop();
+}
+function render(){
+  if(!U.signedIn){ renderLogin(); return; }
+  if(!$('#side')) mountShell();
+  renderShell(); renderMain(); renderModal(); renderToast();
+}
+function mountShell(){
+  $('#root').innerHTML = `<div class="app"><aside class="side" id="side" aria-label="Sidebar"></aside><div class="scrim" id="scrim" data-act="menu"></div>
+    <div class="main"><header class="top"><button type="button" class="iconbtn menu-btn" data-act="menu" aria-label="Open menu">${ic('menu')}</button><div class="crumb" id="crumb"></div>
+      <div class="top-right"><label class="search" for="q">${ic('search')}<input id="q" type="search" autocomplete="off" placeholder="Search projects or clients"></label>
+      <span class="demo-tag">Prototype</span><div class="role"><label class="label" for="roleSel">View as</label><select id="roleSel" data-change="role">${ROLES.map(r=>`<option ${r===U.role?'selected':''}>${r}</option>`).join('')}</select></div><span class="avatar" title="Callum Smith">CS</span></div></header>
+      <main class="content" id="content"></main></div></div>
+    <div class="overlay" id="modal" hidden></div><div class="toast" id="toast" role="status" aria-live="polite" hidden></div>`;
+}
+function renderLogin(){
+  $('#root').innerHTML = `<div class="login"><div class="login-art"><div class="brand">${MARK}<span>FORMA</span></div>
+    <div><h1>Quotes, approvals and handover in one controlled workspace.</h1><p style="margin-top:12px">Built for infrastructure commercial teams who price, approve and sign work across several business areas.</p></div><span class="label" style="color:#8F98A1">Interactive prototype</span></div>
+    <div class="login-form">${U.mfa?`<form class="form" data-form="mfa"><h2>Verify it’s you</h2><p class="muted">Enter the six-digit code from your authenticator app. For this demo the code is <b class="num">123456</b>.</p>
+      ${field('Verification code','code',{required:true,pattern:'123456',ph:'000000'})}<div class="actions">${btn('Verify and continue','',{type:'submit'})}${btn('Back','mfaBack',{cls:'quiet'})}</div></form>`
+    :`<form class="form" data-form="login"><h2>Sign in</h2><p class="muted">Demo sign-in. No real authentication takes place.</p>
+      ${field('Work email','email',{type:'email',required:true,value:'callum@example.com'})}${field('Password','password',{type:'password',required:true,ph:'At least 4 characters'})}
+      <div class="actions">${btn('Continue','',{type:'submit'})}</div></form>`}
+    </div><div class="toast" id="toast" role="status" aria-live="polite" hidden></div></div>`;
+  const f = $('#root input[type=password], #root input[name=code]'); if(f) f.focus();
+}
+
+/* ---------- Actions ---------- */
+const findDoc = id => { const p = cur(); return p && p.documents.find(d=>String(d.id)===String(id)); };
+const goProject = (id, tab) => { const p = S.projects.find(x=>x.id===+id); if(!p) return; U.area = p.area; U.pid = p.id; U.view = 'Projects'; U.tab = tab || 'Overview'; U.nav = false; render(); window.scrollTo(0,0); };
+function newRevision(p, reason){
+  p.revisions.unshift({rev:p.rev, lines:clone(p.lines), discount:p.discount||0, reason: reason||''});
+  p.rev += 1; p.stage = 1; p.approval = 'Technical'; p.signed = false; p.counter = false; p.signer = ''; p.signedAt = ''; p.counterAt = '';
+}
+const A = {
+  nav(d){ U.view = d.v; U.pid = null; U.nav = false; render(); window.scrollTo(0,0); },
+  menu(){ U.nav = !U.nav; renderShell(); },
+  open(d){ goProject(d.id); },
+  review(d){ goProject(d.id, 'Approvals'); },
+  back(){ U.pid = null; render(); },
+  tab(d){ U.tab = d.v; renderMain(); },
+  newProject(){ openModal({t:'project'}); },
+  editProject(){ openModal({t:'project', edit:true}); },
+  continue(){ const p = cur();
+    if(p.stage===0){ update(p.id,{stage:1},'Intake accepted'); toast('Intake accepted. Pricing can start.'); }
+    U.tab = p.stage===2 ? 'Approvals' : p.stage===3 ? (hasApprovedDoc(p) ? (p.counter ? 'Handover' : 'Signing') : 'Documents') : p.stage===4 ? 'Handover' : 'Quote';
+    render(); },
+  newRevision(){ const p = cur(); newRevision(p); log('New quote revision created', 'Revision '+(p.rev-1), 'Revision '+p.rev); persist(); toast(`Revision ${p.rev} created. Approvals have been reset.`); render(); },
+  addCatItem(){ openModal({t:'catItem'}); },
+  addCustom(){ openModal({t:'custom'}); },
+  delLine(d){ const p = cur(); const l = p.lines[+d.i]; p.lines.splice(+d.i,1); log('Quote line removed', l.name, '', p.id); persist(); renderMain(); toast(l.name + ' removed'); },
+  compare(d){ openModal({t:'compare', i:+d.i}); },
+  submitQuote(){ const p = cur(); update(p.id,{stage:2, approval:'Technical', value:Math.round(total(p)*100)/100, rejection:''},'Submitted for technical approval'); U.tab='Approvals'; toast('Submitted to '+techOwner()+' for technical review'); render(); },
+  previewQuote(){ const p = cur(); openModal({t:'doc', doc:snapshot(p, p.stage>=3?'Approved':'Draft'), title:'Customer document preview'}); },
+  approve(d){ const p = cur();
+    if(d.k==='Technical'){ update(p.id,{approval:'Commercial'},`Technical approval granted for revision ${p.rev}`); toast('Technical approval recorded. Sent to '+commOwner()+'.'); }
+    else { update(p.id,{stage:3, approval:'Complete'},`Commercial approval granted for revision ${p.rev}`); toast('Commercial approval recorded. Generate the customer document next.'); }
+    render(); },
+  rejectAsk(d){ openModal({t:'reject', k:d.k}); },
+  genDoc(){ const p = cur(); U.busy = true; renderMain();
+    setTimeout(()=>{ const doc = snapshot(p, p.stage>=3 ? 'Approved' : 'Draft'); p.documents.unshift(doc); U.busy=false; log('Document snapshot generated','', `Q-${p.id} v${p.rev} · ${doc.status}`, p.id); persist(); renderMain(); toast(`${doc.status} document v${p.rev} created`); }, 550); },
+  openDoc(d){ const doc = findDoc(d.d); if(doc) openModal({t:'doc', doc, title:`Quotation ${doc.ref} · v${doc.rev}`}); },
+  pdf(d){ const doc = findDoc(d.d); if(doc) pdfFor(doc); },
+  docx(d){ const doc = findDoc(d.d); if(doc) docxFor(doc); },
+  html(d){ const doc = findDoc(d.d); if(doc) saveFile(`Quotation-${doc.ref}-v${doc.rev}.html`, docHTML(doc), 'text/html'); },
+  pdfModal(){ pdfFor(U.modal.doc, U.modal.kind); },
+  docxModal(){ docxFor(U.modal.doc); },
+  delFile(d){ const p = cur(); const f = p.files.splice(+d.i,1)[0]; log('Supporting file removed', f.name, '', p.id); persist(); renderMain(); },
+  signAsk(){ openModal({t:'sign'}); },
+  countersign(){ const p = cur(); update(p.id,{counter:true, counterAt:stamp()},'Internal countersignature recorded'); toast('Signing complete. The certificate is ready.'); render(); },
+  cert(){ const p = cur(); saveFile(`Certificate-PRJ-${p.id}-rev${p.rev}.txt`, `DEMONSTRATION CERTIFICATE · NOT A LEGAL SIGNATURE\n\nProject: PRJ-${p.id} ${p.name}\nClient: ${p.client}\nRevision: ${p.rev}\nCustomer total: ${money(total(p))} excluding VAT\n\nCustomer signatory: ${p.signer}${p.signerTitle?', '+p.signerTitle:''}\nSigned at: ${p.signedAt}\nCountersigned by: Callum Smith, Authorised signatory\nCountersigned at: ${p.counterAt}\n\nGenerated by the Forma prototype.`, 'text/plain'); },
+  handover(){ const p = cur(); update(p.id,{stage:4, order:'SO-'+p.id, deliveryOwner:p.deliveryOwner||'Marcus Lee'},'Sales order created and handed to delivery'); toast('Sales order SO-'+p.id+' created'); render(); },
+  orderPdf(){ const p = cur(); pdfFor(snapshot(p,'Approved'), 'Sales order'); },
+  addProduct(){ openModal({t:'product'}); },
+  delProduct(d){ const c = S.catalogue.splice(+d.i,1)[0]; log('Product removed', c.name, '', null); persist(); renderMain(); toast(c.name + ' removed from the catalogue'); },
+  importCsv(){ openModal({t:'import'}); },
+  csvTemplate(){ saveFile('catalogue-template.csv', 'name,brand,category,cost,price\nFibre patch panel,Fieldline,Cabling,38,64\nOutdoor access point,Arbor,Wireless,210,329\n', 'text/csv'); },
+  newTender(){ openModal({t:'tender'}); },
+  portal(d){ openModal({t:'portal', id:+d.id}); },
+  closeTender(d){ const t = S.tenders.find(x=>x.id===+d.id); t.status='Closed'; log('Tender closed and bids unsealed','Open','Closed',null); persist(); renderMain(); toast('Tender closed. Bids are now visible.'); },
+  award(d){ const t = S.tenders.find(x=>x.id===+d.id); t.awarded = d.s; log('Tender awarded', t.name, d.s, null); persist(); renderMain(); toast('Awarded to ' + d.s); },
+  addTask(d){ openModal({t:'task', id:+d.id}); },
+  delTask(d){ const p = S.projects.find(x=>x.id===+d.pid); const t = p.tasks.find(x=>String(x.id)===d.tid);
+    if(p.tasks.some(x=>String(x.dep)===d.tid)){ toast('Another task depends on '+t.name+'. Remove that dependency first.'); return; }
+    p.tasks = p.tasks.filter(x=>String(x.id)!==d.tid); log('Delivery task removed', t.name, '', p.id); persist(); renderMain(); },
+  exportCsv(){ const rows = filtered(); saveFile(`pipeline-${U.area.toLowerCase().replace(/\s+/g,'-')}.csv`, 'Reference,Project,Client,Stage,Value,Due,Owner\n' + rows.map(p=>[ 'PRJ-'+p.id, p.name, p.client, STAGES[p.stage], p.value, p.due, p.owner ].map(csvCell).join(',')).join('\n'), 'text/csv'); },
+  exportAudit(){ saveFile(`audit-${U.area.toLowerCase().replace(/\s+/g,'-')}.json`, JSON.stringify(S.events.filter(e=>e.area===U.area), null, 2), 'application/json'); },
+  addUser(){ openModal({t:'user'}); },
+  delUser(d){ const u = S.users[+d.i]; if(S.users.length<2) return; S.users.splice(+d.i,1); log('User removed', u.name, '', null); persist(); renderMain(); toast(u.name + ' removed'); },
+  addArea(){ openModal({t:'area'}); },
+  previewSample(){ const p = inArea()[0] || S.projects[0]; const form = $('form[data-form="presentation"]'); const fd = form ? Object.fromEntries(new FormData(form)) : {};
+    const d = Object.assign(snapshot(p,'Approved'), {template:fd.template||'Standard proposal', theme:fd.theme||'#1B1F23', contact:fd.contact||'', footer:fd.footer||'', logo:U.pendingLogo||areaSet().logo||''});
+    openModal({t:'doc', doc:d, title:'Presentation preview'}); },
+  resetAsk(){ openModal({t:'reset'}); },
+  reset(){ S = seedState(); persist(); U.area = S.areas[0]; U.pid = null; U.view='Projects'; U.modal=null; U.pendingLogo=null; mountShell(); render(); toast('Sample data restored'); },
+  signOut(){ openModal({t:'signout'}); },
+  signOutConfirm(){ U.modal=null; U.signedIn=false; U.mfa=false; U.nav=false; render(); },
+  mfaBack(){ U.mfa=false; render(); },
+  close(){ closeModal(); }
+};
+
+const C = {
+  area(el){ U.area = el.value; U.pid=null; U.q=''; render(); toast('Switched to '+U.area); },
+  role(el){ U.role = el.value; render(); toast('Previewing as '+U.role); },
+  line(el){ const p = cur(); const i = +el.dataset.i, k = el.dataset.k; const l = p.lines[i]; let v = Number(el.value);
+    if(!isFinite(v)) v = 0; v = Math.max(k==='qty'?1:0, k==='qty'?Math.round(v):v);
+    const before = l[k]; l[k] = v; if(k==='qty' && l.basePrice) l.price = bracket(l.basePrice, v);
+    log('Quote line changed', `${l.name} ${k} ${before}`, `${v}`, p.id); persist(); renderMain(); const nx = $('#'+el.id); if(nx) nx.focus(); },
+  narrative(el){ const p = cur(); p.narrative = el.value; log('Customer narrative updated','','',p.id); persist(); toast('Narrative saved'); },
+  discount(el){ const p = cur(); const v = Math.min(100, Math.max(0, Number(el.value)||0)); log('Discount changed', (p.discount||0)+'%', v+'%', p.id); p.discount = v; persist(); renderMain(); },
+  upload(el){ const f = el.files[0]; if(!f) return; const p = cur(); p.files = p.files||[]; p.files.push({name:f.name, status:/eicar/i.test(f.name)?'Quarantined (simulation)':'Scan pending (simulation)'}); log('Supporting file uploaded','',f.name,p.id); persist(); renderMain(); toast('Upload recorded. No real malware scan runs in the prototype.'); },
+  task(el){ const p = S.projects.find(x=>x.id===+el.dataset.pid); const t = p.tasks.find(x=>String(x.id)===el.dataset.tid);
+    if(el.checked && t.dep && !(p.tasks.find(x=>String(x.id)===String(t.dep))||{}).done){ el.checked=false; toast('Complete “'+(p.tasks.find(x=>String(x.id)===String(t.dep))||{}).name+'” first'); return; }
+    if(!el.checked && p.tasks.some(x=>String(x.dep)===String(t.id) && x.done)){ el.checked=true; toast('A later task that depends on this one is already complete'); return; }
+    t.done = el.checked; log('Task '+(t.done?'completed':'reopened'), '', t.name, p.id); persist(); renderMain(); },
+  userRole(el){ const u = S.users[+el.dataset.i]; log('User role changed', u.name+': '+u.role, el.value, null); u.role = el.value; persist(); toast(u.name+' is now '+el.value); },
+  owner(el){ areaSet()[el.dataset.k] = el.value; log((el.dataset.k==='technical'?'Technical':'Commercial')+' approval owner changed','',el.value,null); persist(); toast('Approval routing updated'); },
+  feature(el){ const s = areaSet(); s.features = Object.assign(features(), {[el.dataset.k]:el.checked}); log('Feature '+(el.checked?'enabled':'disabled'),'',el.dataset.k,null); persist(); renderShell(); toast(el.dataset.k+(el.checked?' enabled':' hidden')+' for '+U.area); },
+  logo(el){ const f = el.files[0]; if(!f) return; if(f.size > 1500000){ toast('Choose a logo under 1.5 MB'); el.value=''; return; } const r = new FileReader(); r.onload = () => { U.pendingLogo = r.result; toast('Logo ready. Save presentation to apply it.'); }; r.readAsDataURL(f); },
+  supplier(el){ U.supplier = el.value; renderModal(); },
+  async csv(el){ const f = el.files[0]; if(!f) return; const text = (await f.text()).trim(); const lines = text.split(/\r?\n/).filter(Boolean);
+    const header = (lines.shift()||'').toLowerCase().replace(/\s/g,'');
+    if(header !== 'name,brand,category,cost,price'){ U.modal.error = 'The first row must be: name, brand, category, cost, price. Nothing was imported.'; renderModal(); return; }
+    const rows = lines.map(l=>l.split(',').map(x=>x.trim()));
+    const bad = rows.map((r,i)=>(r.length!==5||!r[0]||!isFinite(+r[3])||!isFinite(+r[4])||+r[3]<0||+r[4]<0||r[3]===''||r[4]==='')?i+2:null).filter(Boolean);
+    const names = rows.map(r=>r[0].toLowerCase()); const existing = S.catalogue.filter(c=>c.area===U.area).map(c=>c.name.toLowerCase());
+    const dupes = rows.filter((r,i)=>names.indexOf(r[0].toLowerCase())!==i || existing.includes(r[0].toLowerCase())).map(r=>r[0]);
+    if(!rows.length){ U.modal.error='The file has no product rows. Nothing was imported.'; renderModal(); return; }
+    if(bad.length || dupes.length){ U.modal.error = 'Nothing was imported. ' + (bad.length?'Check rows '+bad.join(', ')+' (5 columns, cost and price as positive numbers). ':'') + (dupes.length?'Duplicate or existing names: '+[...new Set(dupes)].join(', ')+'.':''); renderModal(); return; }
+    rows.forEach(r=>S.catalogue.push({name:r[0],brand:r[1],category:r[2],cost:+r[3],price:+r[4],area:U.area}));
+    log('Catalogue imported','',rows.length+' products',null); persist(); closeModal(); renderMain(); toast(rows.length+' products imported'); }
+};
+
+const F = {
+  login(d){ U.mfa = true; render(); },
+  mfa(d){ U.signedIn = true; U.mfa = false; mountShell(); render(); toast('Signed in as Callum Smith'); },
+  project(d){ const m = U.modal;
+    if(m.edit){ const p = cur(); const changed = ['name','client','due','brief','owner'].filter(k=>String(p[k]||'')!==String(d[k]||'')); update(p.id, {name:d.name.trim(), client:d.client.trim(), due:d.due, brief:d.brief.trim(), owner:(d.owner||'CS').toUpperCase().slice(0,3)}, changed.length?'Project details updated: '+changed.join(', '):''); toast('Project details saved'); }
+    else { const id = Math.max(1100, ...S.projects.map(p=>p.id)) + 1;
+      const p = {id, name:d.name.trim(), client:d.client.trim(), due:d.due, brief:d.brief.trim(), owner:(d.owner||'CS').toUpperCase().slice(0,3), area:U.area, value:0, stage:0, rev:1, approval:'Technical', narrative:'', discount:0, lines:[], revisions:[], documents:[], files:[], signed:false, counter:false, tasks:[]};
+      S.projects.push(p); log('Project created','',p.name,p.id); persist(); U.pid = id; U.tab = 'Overview'; U.view='Projects'; toast('Project created'); }
+    U.modal = null; render(); },
+  catItem(d, form){ const p = cur(); const c = S.catalogue.find(x=>x.area===U.area && x.name===form.dataset.name); const q = Math.max(1, Math.round(+d.qty||1));
+    p.lines.push({name:c.name, qty:q, cost:c.cost, basePrice:c.price, price:bracket(c.price,q)}); log('Catalogue item added','',`${q} × ${c.name}`,p.id); persist(); closeModal(); renderMain(); toast(`${q} × ${c.name} added`); },
+  custom(d){ const p = cur(); p.lines.push({name:d.name.trim(), qty:Math.max(1,Math.round(+d.qty||1)), cost:+d.cost||0, price:+d.price||0}); log('Custom line added','',d.name,p.id); persist(); closeModal(); renderMain(); toast('Custom line added'); },
+  product(d){ if(S.catalogue.some(c=>c.area===U.area && c.name.toLowerCase()===d.name.trim().toLowerCase())){ toast('A product with that name already exists'); return; }
+    S.catalogue.push({name:d.name.trim(), brand:d.brand.trim(), category:d.category.trim(), cost:+d.cost||0, price:+d.price||0, area:U.area}); log('Product added','',d.name,null); persist(); closeModal(); renderMain(); toast(d.name+' added to the catalogue'); },
+  reject(d){ const p = cur(); const k = U.modal.k; newRevision(p, 'Changes requested: '+d.reason.trim()); p.rejection = d.reason.trim(); log(`${k} review requested changes`, 'In approval', 'Revision '+p.rev+' · '+d.reason.trim(), p.id); persist(); U.modal=null; U.tab='Quote'; render(); toast('Returned to the author with your feedback'); },
+  sign(d){ const p = cur(); update(p.id,{signed:true, signer:d.signer.trim(), signerTitle:(d.title||'').trim(), signedAt:stamp()},'Customer signature recorded'); U.modal=null; render(); toast('Customer signature recorded. Countersign to finish.'); },
+  tender(d){ const sup = d.suppliers.split(',').map(s=>s.trim()).filter(Boolean); if(sup.length<2){ toast('Invite at least two suppliers for a fair tender'); return; }
+    S.tenders.push({id:uid(), name:d.name.trim(), deadline:d.deadline, suppliers:[...new Set(sup)], status:'Open', bids:{}, area:U.area}); log('Tender created','',d.name,null); persist(); closeModal(); renderMain(); toast('Tender created and invitations simulated'); },
+  bid(d, form){ const t = S.tenders.find(x=>x.id===U.modal.id); const s = form.dataset.s; t.bids[s] = +d.amount; log('Sealed bid submitted','',s,null); persist(); renderModal(); renderMain(); toast('Sealed response saved for '+s); },
+  task(d){ const p = S.projects.find(x=>x.id===U.modal.id); if(d.end < d.start){ toast('The end date must be on or after the start date'); return; }
+    p.tasks.push({id:uid(), name:d.name.trim(), owner:d.owner, start:d.start, end:d.end, dep:d.dep||'', milestone:!!d.milestone, done:false}); log('Delivery task added','',d.name,p.id); persist(); closeModal(); renderMain(); toast('Added to the plan'); },
+  user(d){ if(S.users.some(u=>u.email.toLowerCase()===d.email.toLowerCase())){ toast('A user with that email already exists'); return; }
+    S.users.push({name:d.name.trim(), email:d.email.trim(), role:d.role}); log('User added','',d.name,null); persist(); closeModal(); renderMain(); toast(d.name+' added. No invitation email is sent in the demo.'); },
+  area(d){ const n = d.name.trim(); if(S.areas.some(a=>a.toLowerCase()===n.toLowerCase())){ toast('That business area already exists'); return; }
+    S.areas.push(n); U.area = n; log('Business area created','',n,null); persist(); U.modal=null; render(); toast(n+' created'); },
+  presentation(d){ const s = areaSet(); Object.assign(s, {template:d.template, theme:d.theme, contact:d.contact, footer:d.footer}); if(U.pendingLogo){ s.logo = U.pendingLogo; U.pendingLogo=null; }
+    log('Document presentation saved','',d.template,null); if(!store.set(S)) toast('Saved for this session. The browser refused to store it.'); else toast('Presentation saved. New documents use it.'); renderMain(); },
+  sso(d){ areaSet().sso = d; log('SSO configuration preview saved','',d.prov,null); persist(); toast('Configuration saved for review. No identity provider is connected.'); },
+  handover(d){ const p = cur(); update(p.id,{deliveryOwner:d.deliveryOwner, handover:d.handover},'Handover details updated'); toast('Handover saved'); renderMain(); }
+};
+
+/* ---------- Wiring ---------- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if(!el || el.disabled) return;
+  const fn = A[el.dataset.act]; if(fn){ e.preventDefault(); fn(el.dataset, el); }
+});
+document.addEventListener('change', e => { const el = e.target.closest('[data-change]'); if(el && C[el.dataset.change]) C[el.dataset.change](el); });
+document.addEventListener('submit', e => { const form = e.target.closest('form[data-form]'); if(!form) return; e.preventDefault();
+  const fd = new FormData(form); const d = Object.fromEntries(fd); const fn = F[form.dataset.form]; if(fn) fn(d, form); });
+document.addEventListener('input', e => { if(e.target.id==='q'){ U.q = e.target.value; if(U.pid){ U.pid=null; } if(!['Projects','Catalogue','My work','Approvals','Planning','Reports'].includes(U.view)) U.view='Projects'; renderMain(); renderShell(); } });
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ if(U.modal) closeModal(); else if(U.nav){ U.nav=false; renderShell(); } } });
+document.addEventListener('mousedown', e => { if(e.target.id==='modal') closeModal(); });
+
+render();
+})();
+
+</script>
+
+</body>
+</html>
